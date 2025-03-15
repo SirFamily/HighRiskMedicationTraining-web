@@ -1,0 +1,65 @@
+/* src/pages/HomeScreen.module.css */
+.homeContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #F0F4F8;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .logo {
+    width: 100px;
+    margin-bottom: 20px;
+  }
+  
+  .title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #2C3E50;
+    margin-bottom: 10px;
+  }
+  
+  .subtitle {
+    font-size: 18px;
+    color: #34495E;
+    margin-bottom: 25px;
+  }
+  
+  .infoBox {
+    background: #FFF;
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 360px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .infoBox ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .infoBox li {
+    font-size: 16px;
+    color: #2C3E50;
+    margin-bottom: 8px;
+  }
+  
+  .startButton {
+    background-color: #3498DB;
+    color: white;
+    padding: 12px 25px;
+    font-size: 18px;
+    border-radius: 30px;
+    text-decoration: none;
+    display: inline-block;
+    transition: 0.3s;
+  }
+  
+  .startButton:hover {
+    background-color: #2980B9;
+  }
+  
