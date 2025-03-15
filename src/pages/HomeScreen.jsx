@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import styles from './HomeScreen.module.css'; // Import CSS Module
+import styles from './HomeScreen.module.css';
 import Logo from '../assets/ic_launcher-web.png';
+import clickSound from '../assets/audio/sound-effect/apt-game-start_CHpU5qX.mp3'; // Import your sound file
 
 const HomeScreen = () => {
+  const [audio] = useState(new Audio(clickSound));
+
+  const handleClick = () => {
+    audio.play();
+  };
+
   return (
     <div className={styles.homeContainer}>
       <img src={Logo} alt="Logo" className={styles.logo} />
@@ -20,7 +27,7 @@ const HomeScreen = () => {
         </ul>
       </div>
 
-      <Link to="/pre-test" className={styles.startButton}>🚀 เริ่มเรียนรู้</Link>
+      <Link to="/pre-test" className={styles.startButton} onClick={handleClick}>🚀 เริ่มเรียนรู้</Link>
     </div>
   );
 };

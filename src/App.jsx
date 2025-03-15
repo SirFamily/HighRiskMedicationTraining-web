@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomeScreen from './pages/HomeScreen';
+import './App.css'
 // import PreTestScreen from './pages/PreTestScreen';
 // import LearningContentScreen from './pages/LearningContentScreen';
 // import MatchingGameScreen from './pages/MatchingGameScreen';
