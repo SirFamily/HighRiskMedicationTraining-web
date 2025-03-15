@@ -1,0 +1,115 @@
+/* src/pages/PreTestScreen.module.css */
+.preTestContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    /* background: linear-gradient(to bottom, #FFD1DC, #B3E5FC); */
+    text-align: center;
+    padding: 20px;
+}
+
+.progressBar {
+    width: 300px;
+    height: 8px;
+    background-color: #E0E0E0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.progressFill {
+    height: 100%;
+    background-color: #FF6F61;
+    transition: width 0.3s ease-in-out;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #2C3E50;
+    margin-bottom: 15px;
+}
+
+.questionBox {
+    /* background: white; */
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 450px;
+    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); */
+    margin-bottom: 20px;
+    min-height: 150px; /* Add a minimum height */
+    overflow-y: auto; /* Add vertical scroll if content overflows */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.question {
+    font-size: 18px;
+    color: #34495E;
+    font-weight: bold;
+    text-align: center;
+    word-wrap: break-word; /* Prevent long words from overflowing */
+    overflow-wrap: break-word; /* Alternative for older browsers */
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.answerButton {
+    background: #B2EBF2;
+    color: #2C3E50;
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.answerButton:hover {
+    background: #80DEEA;
+    transform: scale(1.05);
+}
+
+.resultBox {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 450px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    min-height: 100px; /* Add a minimum height */
+    overflow-y: auto; /* Add vertical scroll if content overflows */
+}
+
+.score {
+    font-size: 20px;
+    font-weight: bold;
+    color: #E74C3C;
+}
+
+.nextButton {
+    background: linear-gradient(135deg, #3498DB, #1E88E5);
+    color: white;
+    padding: 12px 25px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    margin-top: 15px;
+}
+
+.nextButton:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #1E88E5, #1565C0);
+}
+
