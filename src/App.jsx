@@ -11,7 +11,7 @@ import PreTestScreen from './pages/PreTestScreen';
 // import InputNameScreen from './pages/InputNameScreen';
 // import CertificateScreen from './pages/CertificateScreen';
 // import FeedbackScreen from './pages/FeedbackScreen';
-// import InstructionScreen from './pages/InstructionScreen';
+import InstructionScreen from './pages/InstructionScreen';
 // import VideoScreen from './pages/VideoScreen';
 
 const App = () => {
@@ -19,8 +19,8 @@ const App = () => {
     <Routes>
       <Route path="/" element={<HomeScreen />} />
       <Route path="/pre-test" element={<PreTestScreen />} />
-      {/* <Route path="/instruction" element={<InstructionScreen />} />
-      <Route path="/learning-content" element={<LearningContentScreen />} />
+      <Route path="/instruction" element={<InstructionScreen />} />
+      {/* <Route path="/learning-content" element={<LearningContentScreen />} />
       <Route path="/video" element={<VideoScreen />} />
       <Route path="/matching-game" element={<MatchingGameScreen />} />
       <Route path="/spelling-game" element={<SpellingGameScreen />} />
