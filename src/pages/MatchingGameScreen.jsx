@@ -1,110 +1,230 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // ใช้ React Router
-import styles from './MatchingGameScreen.module.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useName } from "../contexts/NameContext";
 
 // Import images
-import adrenalineImg from '../assets/img-drug/adrenaline.jpg';
-import dopamineImg from '../assets/img-drug/dopamine.jpg';
-import morphineImg from '../assets/img-drug/morphine.jpg';
-import fentanylImg from '../assets/img-drug/fentanyl.jpg';
+import adrenalineImg from "../assets/img-drug/adrenaline.jpg";
+import dopamineImg from "../assets/img-drug/dopamine.jpg";
+import norepinephrineImg from "../assets/img-drug/Norepinephrine.jpg";
+import amiodaroneImg from "../assets/img-drug/amiodarone.jpg";
+import nicardipineImg from "../assets/img-drug/nicardipine.jpg";
+import morphineImg from "../assets/img-drug/morphine.jpg";
+import pethidineImg from "../assets/img-drug/pethidine.jpg";
+import fentanylImg from "../assets/img-drug/fentanyl.jpg";
+import potassiumImg from "../assets/img-drug/potassium-chloride.jpg";
+import magnesiumImg from "../assets/img-drug/magnesium.jpg";
+import insulinImg from "../assets/img-drug/insulin.jpg";
+import sodiumBicarbImg from "../assets/img-drug/sodium-Bicarbonate.jpg";
 
-// Import sounds
-import correctSound from '../assets/audio/sound-effect/correct.mp3';
-import incorrectSound from '../assets/audio/sound-effect/erro.mp3';
-import selectSound from '../assets/audio/sound-effect/comedy_pop_finger_in_mouth_001.mp3';
+// Import audio files
+import buttonSoundFile from "../assets/audio/sound-effect/comedy_pop_finger_in_mouth_001.mp3";
+import correctSoundFile from "../assets/audio/sound-effect/correct.mp3";
+import errorSoundFile from "../assets/audio/sound-effect/erro.mp3";
+import tadaSoundFile from "../assets/audio/sound-effect/ta-da_yrvBrlS.mp3";
+
 
 const drugPairs = [
-  { drug: "Adrenaline", use: "ใช้ฟื้นคืนชีพหัวใจหยุดเต้น", image: adrenalineImg },
-  { drug: "Dopamine", use: "ช่วยเพิ่มความดันโลหิต", image: dopamineImg },
-  { drug: "Morphine", use: "บรรเทาอาการปวดรุนแรง", image: morphineImg },
-  { drug: "Fentanyl", use: "ใช้บรรเทาอาการปวดในมะเร็ง", image: fentanylImg }
+  { drug: "Adrenaline(Epinephrine)", use: "ฟื้นคืนชีพหัวใจหยุดเต้น", image: adrenalineImg },
+  { drug: "Dopamine", use: "เพิ่มความดันโลหิต", image: dopamineImg },
+//   { drug: "Norepinephrine(Levophed)", use: "รักษาภาวะช็อกจากความดันต่ำ", image: norepinephrineImg },
+//   { drug: "Amiodarone", use: "หัวใจเต้นผิดจังหวะ", image: amiodaroneImg },
+//   { drug: "Nicardipine", use: "รักษาความดันโลหิตสูง", image: nicardipineImg },
+//   { drug: "Morphine(MO)", use: "บรรเทาอาการปวดรุนแรง", image: morphineImg },
+//   { drug: "Pethidine", use: "บรรเทาอาการปวดปานกลาง", image: pethidineImg },
+//   { drug: "Fentanyl", use: "ปวดรุนแรงมาก เช่น ปวดมะเร็ง", image: fentanylImg },
+//   { drug: "Potassium chloride (KCL)", use: "โพแทสเซียมต่ำในเลือด", image: potassiumImg },
+//   { drug: "Magnesium sulfate", use: "ป้องกันชักจากครรภ์เป็นพิษ", image: magnesiumImg },
+//   { drug: "Regular insulin", use: "เบาหวานชนิดที่ 1 และ 2", image: insulinImg },
+//   { drug: "7.5% Sodium Bicarbonate", use: "รักษาภาวะเลือดเป็นกรด", image: sodiumBicarbImg },
 ];
 
 const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
 
-const MatchingGameScreen = () => {
+const DrugMatchingGameScreen = () => {
   const [drugs, setDrugs] = useState([]);
   const [uses, setUses] = useState([]);
   const [selectedDrug, setSelectedDrug] = useState(null);
   const [matches, setMatches] = useState({});
-  const navigate = useNavigate(); // ใช้ navigation
+  const navigate = useNavigate();
+  const { updateScore } = useName();
 
-  // Sound instances
-  const correctAudio = new Audio(correctSound);
-  const incorrectAudio = new Audio(incorrectSound);
-  const selectAudio = new Audio(selectSound);
-
-  useEffect(() => {
-    setDrugs(shuffleArray([...drugPairs]));
-    setUses(shuffleArray([...drugPairs]));
-  }, []);
-
-  const playSound = (audio) => {
-    audio.currentTime = 0; // Reset audio to start
-    audio.play();
+  // Play sound using the HTML Audio API
+  const playSound = async (soundFile) => {
+    const audio = new Audio(soundFile);
+    try {
+      await audio.play();
+    } catch (error) {
+      console.error("Error playing sound:", error);
+    }
   };
 
-  const handleSelect = (item, type) => {
-    playSound(selectAudio); // Play select sound on every click
+  useEffect(() => {
+    // Shuffle game data on mount
+    shuffleGame();
+  }, []);
 
+  const shuffleGame = () => {
+    setMatches({});
+    setSelectedDrug(null);
+    setDrugs(shuffleArray([...drugPairs]));
+    setUses(shuffleArray([...drugPairs]));
+  };
+
+  const handleSelect = async (item, type) => {
+    await playSound(buttonSoundFile);
     if (type === "drug") {
       setSelectedDrug(item);
     } else if (selectedDrug) {
-      const correctPair = drugPairs.find(pair => pair.drug === selectedDrug && pair.use === item);
+      const correctPair = drugPairs.find(
+        (pair) => pair.drug === selectedDrug && pair.use === item
+      );
       if (correctPair) {
-        playSound(correctAudio); // Play correct sound
-        setMatches({ ...matches, [selectedDrug]: item });
+        await playSound(correctSoundFile);
+        setMatches((prev) => ({ ...prev, [selectedDrug]: item }));
         setSelectedDrug(null);
       } else {
-        playSound(incorrectAudio); // Play incorrect sound
+        await playSound(errorSoundFile);
+        window.alert("❌ ผิด! โปรดลองอีกครั้ง");
       }
     }
   };
 
   const allMatched = Object.keys(matches).length === drugPairs.length;
 
+  useEffect(() => {
+    if (allMatched) {
+      const score = drugPairs.length;
+      updateScore("matchingGame", score);
+      const timer = setTimeout(() => {
+        playSound(tadaSoundFile);
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [allMatched, updateScore]);
+
+  const goToNextGame = async () => {
+      setTimeout(() => navigate("/spelling-game"), 500);
+    await playSound(buttonSoundFile);
+  };
+
   return (
-    <div className={styles.matchingGameContainer}>
-      <h1 className={styles.title}>🔬 เกมจับคู่ยา</h1>
-      <p className={styles.subtitle}>จับคู่ "ชื่อยา" กับ "ข้อบ่งใช้" ให้ถูกต้อง</p>
-
-      <div className={styles.gameBoard}>
-        {/* คอลัมน์ซ้าย: รายชื่อยา */}
-        <div className={styles.column}>
-          {drugs.map(({ drug, image }) => (
-            <div
-              key={drug}
-              className={`${styles.card} ${selectedDrug === drug ? styles.selected : ''} ${matches[drug] ? styles.matched : ''}`}
-              onClick={() => handleSelect(drug, "drug")}
-            >
-              <img src={image} alt={drug} className={styles.drugImage} />
-              <p>{drug}</p>
-            </div>
-          ))}
+    <div style={styles.container}>
+      <h1 style={styles.title}>เกมจับคู่ยา</h1>
+      <p style={styles.subtitle}>จับคู่ "ชื่อยา" กับ "ข้อบ่งใช้" ให้ถูกต้อง</p>
+      <div style={styles.gameContainer}>
+        <div style={styles.column}>
+          {drugs.map(({ drug, image }) => {
+            const cardStyle = {
+              ...styles.card,
+              ...(selectedDrug === drug ? styles.selectedCard : {}),
+              ...(matches[drug] ? styles.matchedCard : {}),
+            };
+            return (
+              <div
+                key={drug}
+                style={cardStyle}
+                onClick={() => handleSelect(drug, "drug")}
+              >
+                {image && <img src={image} alt={drug} style={styles.drugImage} />}
+                <p style={styles.cardText}>{drug}</p>
+              </div>
+            );
+          })}
         </div>
-
-        {/* คอลัมน์ขวา: ข้อบ่งใช้ */}
-        <div className={styles.column}>
-          {uses.map(({ use }) => (
-            <div
-              key={use}
-              className={`${styles.card} ${Object.values(matches).includes(use) ? styles.matched : ''}`}
-              onClick={() => handleSelect(use, "use")}
-            >
-              <p>{use}</p>
-            </div>
-          ))}
+        <div style={styles.column}>
+          {uses.map(({ use }) => {
+            const cardStyle = {
+              ...styles.card,
+              ...(Object.values(matches).includes(use) ? styles.matchedCard : {}),
+            };
+            return (
+              <div
+                key={use}
+                style={cardStyle}
+                onClick={() => handleSelect(use, "use")}
+              >
+                <p style={styles.cardText}>{use}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
-
-      {/* แสดงปุ่ม "ไปหน้าถัดไป" เมื่อจับคู่ครบ */}
       {allMatched && (
-        <button className={styles.nextButton} onClick={() => navigate('/spelling-game')}>
-          ➡️ ไปยังเกมสะกดคำ
+        <button style={styles.nextButton} onClick={goToNextGame}>
+          ไปยังเกมสะกดคำ →
         </button>
       )}
     </div>
   );
 };
 
-export default MatchingGameScreen;
+const styles = {
+  container: {
+    minHeight: "100vh",
+    padding: "20px",
+    paddingTop: "60px",
+    background: "linear-gradient(to bottom right, #e0f7fa, #f1f8e9)",
+  },
+  title: {
+    fontSize: "24px",
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#34495e",
+  },
+  subtitle: {
+    fontSize: "14px",
+    color: "#7f8c8d",
+    textAlign: "center",
+    marginBottom: "20px",
+  },
+  gameContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  column: {
+    width: "48%",
+  },
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: "12px",
+    padding: "12px",
+    marginBottom: "10px",
+    boxShadow: "0 1px 2px rgba(0,0,0,0.2)",
+    textAlign: "center",
+    cursor: "pointer",
+  },
+  cardText: {
+    fontSize: "13px",
+    textAlign: "center",
+    color: "#34495e",
+    margin: 0,
+  },
+  selectedCard: {
+    border: "2px solid #3498db",
+  },
+  matchedCard: {
+    backgroundColor: "#dcedc8",
+  },
+  nextButton: {
+    backgroundColor: "#3498db",
+    borderRadius: "20px",
+    padding: "12px",
+    textAlign: "center",
+    marginTop: "10px",
+    cursor: "pointer",
+    border: "none",
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: "16px",
+    display: "block",
+    margin: "10px auto 0",
+  },
+  drugImage: {
+    width: "80px",
+    height: "80px",
+    marginBottom: "8px",
+    objectFit: "contain",
+  },
+};
+
+export default DrugMatchingGameScreen;

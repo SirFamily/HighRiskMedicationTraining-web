@@ -5,12 +5,12 @@ import './App.css'
 import PreTestScreen from './pages/PreTestScreen';
 // import LearningContentScreen from './pages/LearningContentScreen';
 import MatchingGameScreen from './pages/MatchingGameScreen';
-// import SpellingGameScreen from './pages/SpellingGameScreen';
-// import SimulationGameScreen from './pages/SimulationGameScreen';
-// import PostTestScreen from './pages/PostTestScreen';
-// import InputNameScreen from './pages/InputNameScreen';
-// import CertificateScreen from './pages/CertificateScreen';
-// import FeedbackScreen from './pages/FeedbackScreen';
+import SpellingGameScreen from './pages/SpellingGameScreen';
+import SimulationGameScreen from './pages/SimulationGameScreen';
+import PostTestScreen from './pages/PostTestScreen';
+import InputNameScreen from './pages/InputNameScreen';
+import CertificateScreen from './pages/CertificateScreen';
+import FeedbackScreen from './pages/FeedbackScreen';
 import InstructionScreen from './pages/InstructionScreen';
 // import VideoScreen from './pages/VideoScreen';
 
@@ -23,12 +23,12 @@ const App = () => {
       {/* <Route path="/learning-content" element={<LearningContentScreen />} /> */}
       {/* <Route path="/video" element={<VideoScreen />} /> */}
       <Route path="/matching-game" element={<MatchingGameScreen />} />
-      {/* <Route path="/spelling-game" element={<SpellingGameScreen />} />
+      <Route path="/spelling-game" element={<SpellingGameScreen />} />
       <Route path="/simulation-game" element={<SimulationGameScreen />} />
       <Route path="/post-test" element={<PostTestScreen />} />
       <Route path="/input-name" element={<InputNameScreen />} />
       <Route path="/feedback" element={<FeedbackScreen />} />
-      <Route path="/certificate" element={<CertificateScreen />} /> */}
+      <Route path="/certificate" element={<CertificateScreen />} />
     </Routes>
   );
 };
