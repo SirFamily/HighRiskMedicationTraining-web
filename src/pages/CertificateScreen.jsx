@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useName } from "../contexts/NameContext";
+import Confetti from "react-confetti"; // Make sure to install this package: npm install react-confetti
 
-// Import assets
+// Import images and audio files
 import trophyImg from "../assets/trophy.png";
 import linkImg from "../assets/link.png";
 import certificateSound from "../assets/audio/sound-effect/gen-prbmuue.mp3";
@@ -12,11 +13,27 @@ const CertificateScreen = () => {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [sound, setSound] = useState(null);
+  const [showConfetti, setShowConfetti] = useState(false);
+  // We'll use a ref to store the window dimensions for confetti
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
 
+  // Fetch window dimensions on resize
+  useEffect(() => {
+    const handleResize = () =>
+      setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Fetch certificate data from Google Script
   const fetchCertificate = async () => {
     setLoading(true);
     const url =
       "https://script.google.com/macros/s/AKfycbww9pbG0AV5oaCVh8wRwigFDYXe3R-YJLxzFzulTAqPNxkReh_BHibGVlfVuY4qro-N1Q/exec?action=getUsers";
+
     try {
       const response = await fetch(url);
       const json = await response.json();
@@ -30,6 +47,7 @@ const CertificateScreen = () => {
         if (foundEntries.length > 0) {
           const latestEntry = foundEntries[0];
           setPdfUrl(latestEntry["PDF URL"]);
+          setShowConfetti(true);
         } else {
           setPdfUrl(null);
         }
@@ -45,6 +63,7 @@ const CertificateScreen = () => {
     fetchCertificate();
   }, []);
 
+  // Play certificate sound after a delay when pdfUrl is available
   useEffect(() => {
     if (pdfUrl) {
       setTimeout(async () => {
@@ -53,6 +72,7 @@ const CertificateScreen = () => {
     }
   }, [pdfUrl]);
 
+  // Play sound using the HTML Audio API
   const playSound = async (soundFile) => {
     try {
       const audio = new Audio(soundFile);
@@ -65,7 +85,16 @@ const CertificateScreen = () => {
 
   return (
     <div style={styles.container}>
-      {/* Trophy Image with bounce animation */}
+      {showConfetti && (
+        <Confetti
+          width={windowDimensions.width}
+          height={windowDimensions.height}
+          numberOfPieces={200}
+          recycle={false}
+        />
+      )}
+
+      {/* Trophy image with bounce animation */}
       <img src={trophyImg} alt="Trophy" style={styles.trophyIcon} />
 
       <h1 style={styles.title}>🏆 เกียรติบัตร</h1>

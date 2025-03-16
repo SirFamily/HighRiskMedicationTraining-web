@@ -86,7 +86,7 @@ const InputNameScreen = () => {
   // Function to send data to Google Script to request a certificate
   const sendCertificate = async (name) => {
     setLoading(true);
-    const url = 'https://script.google.com/macros/s/AKfycbxEWkLcf4TYCS7i3tSQGP7qYbiLTViyWsiqr73sn3QlI5kbniMZelXVXFE4Dvc3KAqygA/exec?action=addUser';
+    const url = 'https://script.google.com/macros/s/AKfycby5qTKH3y5QJqAT9P_9xwmGJdxtqfC4FP32Qw9te1FlSQQxunxV2KlQ1Z3jAAtu982g7Q/exec?action=addUserWeb';
 
     const date = new Date();
     const thaiYear = date.getFullYear() + 543;
