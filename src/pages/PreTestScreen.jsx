@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useName } from "../contexts/NameContext";
+import ResultModal from "../components/ResultModal"; // นำเข้า Component ใหม่
 
 // Import your sound files
 import buttonSound from "../assets/audio/sound-effect/comedy_pop_finger_in_mouth_001.mp3";
@@ -28,6 +29,11 @@ const PreTestScreen = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [progress, setProgress] = useState(0);
+  const [modalData, setModalData] = useState({ // เพิ่ม state สำหรับ Modal
+    show: false,
+    score: 0,
+    feedback: ""
+  });
   const navigate = useNavigate();
   const { updateScore } = useName();
 
@@ -40,6 +46,15 @@ const PreTestScreen = () => {
       console.error("Error playing sound:", error);
     }
   };
+
+  // Load score from session storage on component mount
+  // useEffect(() => {
+  //   const storedScore = sessionStorage.getItem("preTestScore");
+  //   if (storedScore) {
+  //     console.log("Loaded preTestScore from session:", storedScore);
+  //     // You can use this stored score if needed, for example, to display it somewhere.
+  //   }
+  // }, []);
 
   const handleAnswer = async (answer) => {
     await playSound(buttonSound);
@@ -62,22 +77,35 @@ const PreTestScreen = () => {
     const percentage = (score / questions.length) * 100;
     updateScore("preTest", score);
 
+    // Store the score in session storage
+    sessionStorage.setItem("preTestScore", score);
+    console.log("Saved preTestScore to session:", score);
+
     let feedbackMessage = "ลองศึกษาทบทวนเนื้อหาเพิ่มเติมอีกสักนิดนะ 📚";
     if (percentage >= 80) {
-      feedbackMessage = "เยี่ยมมาก! 🎉 คุณมีความรู้ดีมาก";
+      feedbackMessage = "เยี่ยมมาก! 🎉";
     } else if (percentage >= 60) {
       feedbackMessage = "ดีมาก! แต่ยังต้องพัฒนาอีกนิดนะ ✨";
     }
 
     await playSound(scoreSound);
 
-    alert(`📋 สรุปผลการทดสอบ\nคะแนนของคุณ: ${score}/${questions.length}\n${feedbackMessage}`);
-    navigate("/instruction"); // Redirect to the Instruction page
+    setModalData({
+      show: true,
+      score,
+      feedback: feedbackMessage,
+    }); // Redirect to the Instruction page
+  };
+
+  const handleCloseModal = () => {
+    setModalData({ ...modalData, show: false });
+    navigate("/instruction");
   };
 
   return (
     <div style={styles.container}>
       <div style={styles.contentContainer}>
+  
         <div style={styles.progressBar}>
           <div style={{ ...styles.progressFill, width: `${progress}%` }}></div>
         </div>
@@ -90,6 +118,13 @@ const PreTestScreen = () => {
             FALSE
           </button>
         </div>
+        <ResultModal
+        show={modalData.show}
+        score={modalData.score}
+        totalQuestions={questions.length}
+        feedback={modalData.feedback}
+        onClose={handleCloseModal}
+      />
       </div>
     </div>
   );
