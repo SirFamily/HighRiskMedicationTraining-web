@@ -15,20 +15,21 @@ const InputNameScreen = () => {
   const [loading, setLoading] = useState(false);
   const [sound, setSound] = useState(null);
 
-  // Load name from session storage on component mount
-  useEffect(() => {
-    const storedFirstName = sessionStorage.getItem('firstName');
-    const storedLastName = sessionStorage.getItem('lastName');
-    if (storedFirstName) {
-      setFirstName(storedFirstName);
-    }
-    if (storedLastName) {
-      setLastName(storedLastName);
-    }
-    if (storedFirstName && storedLastName) {
-      validateInput(storedFirstName, storedLastName);
-    }
-  }, []);
+  // **Removed the useEffect that loaded from sessionStorage**
+  // // Load name from session storage on component mount
+  // useEffect(() => {
+  //   const storedFirstName = sessionStorage.getItem('firstName');
+  //   const storedLastName = sessionStorage.getItem('lastName');
+  //   if (storedFirstName) {
+  //     setFirstName(storedFirstName);
+  //   }
+  //   if (storedLastName) {
+  //     setLastName(storedLastName);
+  //   }
+  //   if (storedFirstName && storedLastName) {
+  //     validateInput(storedFirstName, storedLastName);
+  //   }
+  // }, []);
 
   // Clean up sound when component unmounts
   useEffect(() => {
