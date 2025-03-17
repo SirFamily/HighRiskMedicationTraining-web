@@ -121,12 +121,12 @@ const InputNameScreen = () => {
     const formData = new URLSearchParams();
     formData.append('fullname', name);
     formData.append('preTest', preTestScore);
-    formData.append('simulationGame', simulationGameScore);
     formData.append('matchingGame', matchingGameScore);
     formData.append('spellingGame', spellingGameScore);
+    formData.append('simulationGame', simulationGameScore);
     formData.append('postTest', postTestScore);
     formData.append('date', thaiDate);
-  
+  console.log(formData);
     try {
       let response = await fetch(url, {
         method: 'POST',
