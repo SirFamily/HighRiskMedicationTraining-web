@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useName } from "../contexts/NameContext";
+import ResultModal from "../components/ResultModal"; // Import ResultModal
 
 // Import images
 import adrenalineImg from "../assets/img-drug/adrenaline.jpg";
@@ -26,16 +27,16 @@ import tadaSoundFile from "../assets/audio/sound-effect/ta-da_yrvBrlS.mp3";
 const drugPairs = [
   { drug: "Adrenaline(Epinephrine)", use: "ฟื้นคืนชีพหัวใจหยุดเต้น", image: adrenalineImg },
   { drug: "Dopamine", use: "เพิ่มความดันโลหิต", image: dopamineImg },
-//   { drug: "Norepinephrine(Levophed)", use: "รักษาภาวะช็อกจากความดันต่ำ", image: norepinephrineImg },
-//   { drug: "Amiodarone", use: "หัวใจเต้นผิดจังหวะ", image: amiodaroneImg },
-//   { drug: "Nicardipine", use: "รักษาความดันโลหิตสูง", image: nicardipineImg },
-//   { drug: "Morphine(MO)", use: "บรรเทาอาการปวดรุนแรง", image: morphineImg },
-//   { drug: "Pethidine", use: "บรรเทาอาการปวดปานกลาง", image: pethidineImg },
-//   { drug: "Fentanyl", use: "ปวดรุนแรงมาก เช่น ปวดมะเร็ง", image: fentanylImg },
-//   { drug: "Potassium chloride (KCL)", use: "โพแทสเซียมต่ำในเลือด", image: potassiumImg },
-//   { drug: "Magnesium sulfate", use: "ป้องกันชักจากครรภ์เป็นพิษ", image: magnesiumImg },
-//   { drug: "Regular insulin", use: "เบาหวานชนิดที่ 1 และ 2", image: insulinImg },
-//   { drug: "7.5% Sodium Bicarbonate", use: "รักษาภาวะเลือดเป็นกรด", image: sodiumBicarbImg },
+  // { drug: "Norepinephrine(Levophed)", use: "รักษาภาวะช็อกจากความดันต่ำ", image: norepinephrineImg },
+  // { drug: "Amiodarone", use: "หัวใจเต้นผิดจังหวะ", image: amiodaroneImg },
+  // { drug: "Nicardipine", use: "รักษาความดันโลหิตสูง", image: nicardipineImg },
+  // { drug: "Morphine(MO)", use: "บรรเทาอาการปวดรุนแรง", image: morphineImg },
+  // { drug: "Pethidine", use: "บรรเทาอาการปวดปานกลาง", image: pethidineImg },
+  // { drug: "Fentanyl", use: "ปวดรุนแรงมาก เช่น ปวดมะเร็ง", image: fentanylImg },
+  // { drug: "Potassium chloride (KCL)", use: "โพแทสเซียมต่ำในเลือด", image: potassiumImg },
+  // { drug: "Magnesium sulfate", use: "ป้องกันชักจากครรภ์เป็นพิษ", image: magnesiumImg },
+  // { drug: "Regular insulin", use: "เบาหวานชนิดที่ 1 และ 2", image: insulinImg },
+  // { drug: "7.5% Sodium Bicarbonate", use: "รักษาภาวะเลือดเป็นกรด", image: sodiumBicarbImg },
 ];
 
 const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
@@ -47,6 +48,8 @@ const DrugMatchingGameScreen = () => {
   const [matches, setMatches] = useState({});
   const navigate = useNavigate();
   const { updateScore } = useName();
+  const [showResultModal, setShowResultModal] = useState(false); // Add state for modal
+  const allMatchedRef = useRef(false); // Use ref to track if all matched
 
   // Play sound using the HTML Audio API
   const playSound = async (soundFile) => {
@@ -68,6 +71,7 @@ const DrugMatchingGameScreen = () => {
     setSelectedDrug(null);
     setDrugs(shuffleArray([...drugPairs]));
     setUses(shuffleArray([...drugPairs]));
+    allMatchedRef.current = false; // Reset the ref when shuffling
   };
 
   const handleSelect = async (item, type) => {
@@ -92,21 +96,23 @@ const DrugMatchingGameScreen = () => {
   const allMatched = Object.keys(matches).length === drugPairs.length;
 
   useEffect(() => {
-    if (allMatched) {
+    if (allMatched && !allMatchedRef.current) {
+      allMatchedRef.current = true; // Set the ref to true to prevent multiple updates
       const score = drugPairs.length;
       updateScore("matchingGame", score);
-      const timer = setTimeout(() => {
-        playSound(tadaSoundFile);
-      }, 600);
-      return () => clearTimeout(timer);
+      setShowResultModal(true); // Show modal when all matched
     }
   }, [allMatched, updateScore]);
 
-  const goToNextGame = async () => {
-      setTimeout(() => navigate("/spelling-game"), 500);
-    await playSound(buttonSoundFile);
+  const handleCloseModal = () => {
+    setShowResultModal(false);
+    goToNextGame();
   };
 
+  const goToNextGame = async () => {
+    await playSound(buttonSoundFile);
+    navigate("/spelling-game");
+  };
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>เกมจับคู่ยา</h1>
@@ -149,11 +155,13 @@ const DrugMatchingGameScreen = () => {
           })}
         </div>
       </div>
-      {allMatched && (
-        <button style={styles.nextButton} onClick={goToNextGame}>
-          ไปยังเกมสะกดคำ →
-        </button>
-      )}
+      <ResultModal
+          show={showResultModal}
+          score={drugPairs.length}
+          totalQuestions={drugPairs.length}
+          feedback={"คุณทำแบบทดสอบเสร็จสมบูรณ์แล้ว! เยี่ยมมาก!"}
+          onClose={handleCloseModal}
+        />
     </div>
   );
 };
