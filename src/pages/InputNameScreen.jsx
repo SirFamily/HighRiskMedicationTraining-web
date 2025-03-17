@@ -8,12 +8,27 @@ import comedyPopSound from '../assets/audio/sound-effect/comedy_pop_finger_in_mo
 
 const InputNameScreen = () => {
   const navigate = useNavigate();
-  const { updateName, scores } = useName();
+  const { updateName } = useName();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [isInputValid, setIsInputValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [sound, setSound] = useState(null);
+
+  // Load name from session storage on component mount
+  useEffect(() => {
+    const storedFirstName = sessionStorage.getItem('firstName');
+    const storedLastName = sessionStorage.getItem('lastName');
+    if (storedFirstName) {
+      setFirstName(storedFirstName);
+    }
+    if (storedLastName) {
+      setLastName(storedLastName);
+    }
+    if (storedFirstName && storedLastName) {
+      validateInput(storedFirstName, storedLastName);
+    }
+  }, []);
 
   // Clean up sound when component unmounts
   useEffect(() => {
@@ -37,12 +52,16 @@ const InputNameScreen = () => {
   const handleFirstNameChange = (e) => {
     const text = e.target.value;
     setFirstName(text);
+    // Store first name in session storage
+    sessionStorage.setItem('firstName', text);
     validateInput(text, lastName);
   };
 
   const handleLastNameChange = (e) => {
     const text = e.target.value;
     setLastName(text);
+    // Store last name in session storage
+    sessionStorage.setItem('lastName', text);
     validateInput(firstName, text);
   };
 
@@ -92,13 +111,20 @@ const InputNameScreen = () => {
     const thaiYear = date.getFullYear() + 543;
     const thaiDate = `${date.getDate()} ${date.toLocaleString("th-TH", { month: "long" })} พ.ศ. ${thaiYear}`;
 
+    // Retrieve scores from sessionStorage
+    const matchingGameScore = sessionStorage.getItem('matchingGameScore') || 0;
+    const postTestScore = sessionStorage.getItem('postTestScore') || 0;
+    const preTestScore = sessionStorage.getItem('preTestScore') || 0;
+    const simulationGameScore = sessionStorage.getItem('simulationGameScore') || 0;
+    const spellingGameScore = sessionStorage.getItem('spellingGameScore') || 0;
+
     const formData = new URLSearchParams();
     formData.append('fullname', name);
-    formData.append('preTest', scores.preTest);
-    formData.append('simulationGame', scores.simulationGame);
-    formData.append('matchingGame', scores.matchingGame);
-    formData.append('spellingGame', scores.spellingGame);
-    formData.append('postTest', scores.postTest);
+    formData.append('preTest', preTestScore);
+    formData.append('simulationGame', simulationGameScore);
+    formData.append('matchingGame', matchingGameScore);
+    formData.append('spellingGame', spellingGameScore);
+    formData.append('postTest', postTestScore);
     formData.append('date', thaiDate);
   
     try {

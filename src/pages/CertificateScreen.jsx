@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useName } from "../contexts/NameContext";
+// import { useName } from "../contexts/NameContext";
 import Confetti from "react-confetti"; // Make sure to install this package: npm install react-confetti
 
 // Import images and audio files
@@ -8,8 +8,9 @@ import linkImg from "../assets/link.png";
 import certificateSound from "../assets/audio/sound-effect/gen-prbmuue.mp3";
 
 const CertificateScreen = () => {
-  const { firstName, lastName } = useName();
-  const fullName = `${firstName} ${lastName}`;
+  // const { firstName, lastName } = useName(); // Remove this line
+  // const fullName = `${firstName} ${lastName}`; // Remove this line
+  const [fullName, setFullName] = useState(""); // Add this line
   const [pdfUrl, setPdfUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [sound, setSound] = useState(null);
@@ -17,15 +18,27 @@ const CertificateScreen = () => {
   // We'll use a ref to store the window dimensions for confetti
   const [windowDimensions, setWindowDimensions] = useState({
     width: window.innerWidth,
-    height: window.innerHeight
+    height: window.innerHeight,
   });
 
   // Fetch window dimensions on resize
   useEffect(() => {
     const handleResize = () =>
-      setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Load name from session storage on component mount
+  useEffect(() => {
+    const storedFirstName = sessionStorage.getItem("firstName");
+    const storedLastName = sessionStorage.getItem("lastName");
+    if (storedFirstName && storedLastName) {
+      setFullName(`${storedFirstName} ${storedLastName}`);
+    }
   }, []);
 
   // Fetch certificate data from Google Script
@@ -60,8 +73,10 @@ const CertificateScreen = () => {
   };
 
   useEffect(() => {
-    fetchCertificate();
-  }, []);
+    if (fullName) {
+      fetchCertificate();
+    }
+  }, [fullName]);
 
   // Play certificate sound after a delay when pdfUrl is available
   useEffect(() => {
