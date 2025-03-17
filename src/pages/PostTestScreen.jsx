@@ -83,7 +83,7 @@ const PostTestScreen = () => {
     const score = questions.filter((item, index) => answers[index] === item.correct).length;
     const percentage = (score / questions.length) * 100;
     const passed = percentage >= 80;
-
+    sessionStorage.setItem("postTestScore", score); // Add this line to store the score
     await playSound(passed ? tadaSound : failedSound);
 
     window.alert(

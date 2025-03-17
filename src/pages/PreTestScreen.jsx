@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useName } from "../contexts/NameContext";
 import ResultModal from "../components/ResultModal"; // นำเข้า Component ใหม่
 
 // Import your sound files
@@ -35,7 +34,6 @@ const PreTestScreen = () => {
     feedback: ""
   });
   const navigate = useNavigate();
-  const { updateScore } = useName();
 
   // Function to play a sound using the HTML Audio API
   const playSound = async (soundFile) => {
@@ -75,8 +73,6 @@ const PreTestScreen = () => {
   const checkResults = async (finalAnswers) => {
     const score = questions.filter((item, index) => finalAnswers[index] === item.correct).length;
     const percentage = (score / questions.length) * 100;
-    updateScore("preTest", score);
-
     // Store the score in session storage
     sessionStorage.setItem("preTestScore", score);
     console.log("Saved preTestScore to session:", score);

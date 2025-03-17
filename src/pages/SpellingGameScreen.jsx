@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useName } from "../contexts/NameContext";
 
 // Import sound-effect files
 import newFollowerSound from "../assets/audio/sound-effect/new-follower_62zQLKz.mp3";
@@ -49,7 +48,6 @@ const SpellingGameScreen = () => {
   const [completedWords, setCompletedWords] = useState([]);
   const [isLastWord, setIsLastWord] = useState(false);
   const navigate = useNavigate();
-  const { updateScore } = useName();
 
   useEffect(() => {
     // Start a new round when the component mounts.
@@ -163,7 +161,7 @@ const SpellingGameScreen = () => {
       if (completedWords.length + 1 === drugNames.length) {
         await playSoundEffect(taDaSound);
         const score = drugNames.length;
-        updateScore("spellingGame", score);
+        sessionStorage.setItem("spellingGameScore", score); // Add this line
         if (currentDrugData && currentDrugData.sound) {
           setTimeout(async () => {
             await playDrugSoundEffect(currentDrugData.sound);

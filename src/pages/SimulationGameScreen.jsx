@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useName } from "../contexts/NameContext";
 
 // Import images
 import scenario1Image from "../assets/simulation/S__6643720_0.jpg";
@@ -147,7 +146,6 @@ const SimulationGameScreen = () => {
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const navigate = useNavigate();
-  const { updateScore } = useName();
 
   // Function to play a sound effect using the HTML Audio API
   const playSound = async (soundFile) => {
@@ -182,8 +180,7 @@ const SimulationGameScreen = () => {
       }
     });
     setCorrectAnswers(correctCount);
-    updateScore("simulationGame", correctCount);
-
+    sessionStorage.setItem("simulationGameScore", correctCount); // Add this line
     const percentage = (correctCount / scenarios.length) * 100;
     let feedbackMessage = "ลองศึกษาทบทวนเนื้อหาเพิ่มเติมอีกสักนิดนะ 📚";
     if (percentage >= 80) {

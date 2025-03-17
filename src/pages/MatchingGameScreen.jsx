@@ -97,10 +97,11 @@ const DrugMatchingGameScreen = () => {
 
   useEffect(() => {
     if (allMatched && !allMatchedRef.current) {
-      allMatchedRef.current = true; // Set the ref to true to prevent multiple updates
+      allMatchedRef.current = true; 
       const score = drugPairs.length;
       updateScore("matchingGame", score);
-      setShowResultModal(true); // Show modal when all matched
+      sessionStorage.setItem("matchingGameScore", score); // Store score in sessionStorage
+      setShowResultModal(true)
     }
   }, [allMatched, updateScore]);
 
