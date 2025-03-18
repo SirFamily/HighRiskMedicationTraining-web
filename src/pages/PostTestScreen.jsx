@@ -26,13 +26,12 @@ const PostTestScreen = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [testCompleted, setTestCompleted] = useState(false);
-  const [progress, setProgress] = useState(0); // percentage value (0 to 100)
+  const [progress, setProgress] = useState(0); 
   const [sound, setSound] = useState(null);
   const { firstName, lastName } = useName();
   const fullName = `${firstName} ${lastName}`;
   const navigate = useNavigate();
 
-  // Clean up sound when the component unmounts
   useEffect(() => {
     return () => {
       if (sound) {
@@ -41,14 +40,12 @@ const PostTestScreen = () => {
     };
   }, [sound]);
 
-  // When the test is marked as complete, delay before finishing the test.
   useEffect(() => {
     if (testCompleted) {
       setTimeout(() => finishTest(), 600);
     }
   }, [testCompleted]);
 
-  // Helper function to play sound using the HTML Audio API
   const playSound = async (soundFile) => {
     try {
       const audio = new Audio(soundFile);
@@ -59,14 +56,12 @@ const PostTestScreen = () => {
     }
   };
 
-  // Handler for answering a question
   const handleAnswer = async (answer) => {
     await playSound(buttonSound);
 
     const newAnswers = { ...answers, [currentQuestionIndex]: answer };
     setAnswers(newAnswers);
 
-    // Update progress percentage
     const newProgress = ((currentQuestionIndex + 1) / questions.length) * 100;
     setProgress(newProgress);
 
@@ -77,13 +72,12 @@ const PostTestScreen = () => {
     }
   };
 
-  // Finish test: calculate score, play appropriate sound, and navigate based on result.
   const finishTest = async () => {
     if (!testCompleted) return;
     const score = questions.filter((item, index) => answers[index] === item.correct).length;
     const percentage = (score / questions.length) * 100;
     const passed = percentage >= 80;
-    sessionStorage.setItem("postTestScore", score); // Add this line to store the score
+    sessionStorage.setItem("postTestScore", score); 
     await playSound(passed ? tadaSound : failedSound);
 
     window.alert(
@@ -92,16 +86,13 @@ const PostTestScreen = () => {
       )}%)`
     );
 
-    // Navigate based on pass/fail result.
     if (!passed) {
-      // If not passed, reset the test and navigate to Instruction page.
       setTestCompleted(false);
       setCurrentQuestionIndex(0);
       setAnswers({});
       setProgress(0);
       navigate("/instruction");
     } else {
-      // If passed, navigate to InputName page.
       navigate("/input-name");
     }
   };
@@ -135,16 +126,18 @@ const PostTestScreen = () => {
 
 const styles = {
   container: {
+    display: "flex", 
+    justifyContent: "center", 
+    alignItems: "center", 
     minHeight: "100vh",
     padding: "20px",
-    paddingTop: "50px",
-    background: "linear-gradient(to bottom right, #FFDEE9, #B5FFFC)",
+    // background: "linear-gradient(to bottom right, #FFDEE9, #B5FFFC)",  //Optional background
   },
   contentContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+    maxWidth: "600px",
+    width: "100%", 
+    margin: "0 auto",
+    textAlign: "center",
   },
   progressBar: {
     width: "90%",
@@ -152,6 +145,7 @@ const styles = {
     backgroundColor: "#E0E0E0",
     borderRadius: "5px",
     overflow: "hidden",
+    margin: "0 auto",
   },
   progressFill: {
     height: "100%",
@@ -161,25 +155,23 @@ const styles = {
   question: {
     fontSize: "20px",
     margin: "20px 0",
-    textAlign: "center",
     fontWeight: "bold",
   },
   buttonContainer: {
     display: "flex",
     justifyContent: "space-around",
-    width: "100%",
     marginTop: "20px",
   },
   answerButton: {
     padding: "15px",
     backgroundColor: "#B5EAEA",
+    border: "none",
     borderRadius: "10px",
     width: "40%",
-    border: "none",
     cursor: "pointer",
-    textAlign: "center",
     fontSize: "16px",
     fontWeight: "bold",
+    transition: "background-color 0.3s ease", 
   },
   checkButton: {
     backgroundColor: "#28A745",
