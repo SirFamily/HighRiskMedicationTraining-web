@@ -243,7 +243,7 @@ const SpellingGameScreen = () => {
 const styles = {
   container: {
     minHeight: "100vh",
-    background: "linear-gradient(to bottom right, #FFDEE9, #B5FFFC)",
+    // background: "linear-gradient(to bottom right, #FFDEE9, #B5FFFC)",
     position: "relative",
   },
   scrollContainer: {
