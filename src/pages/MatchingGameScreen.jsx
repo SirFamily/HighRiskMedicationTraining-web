@@ -172,13 +172,16 @@ const styles = {
     minHeight: "100vh",
     padding: "20px",
     paddingTop: "60px",
-    background: "linear-gradient(to bottom right, #e0f7fa, #f1f8e9)",
+    paddingBottom: "40px", // Added bottom padding
+    // background: "linear-gradient(to bottom right, #e0f7fa, #f1f8e9)",
+    overflow: "hidden", // Prevent overall page scroll
   },
   title: {
     fontSize: "24px",
     fontWeight: "bold",
     textAlign: "center",
     color: "#34495e",
+    marginBottom: "8px", // Added spacing
   },
   subtitle: {
     fontSize: "14px",
@@ -189,19 +192,43 @@ const styles = {
   gameContainer: {
     display: "flex",
     justifyContent: "space-between",
+    gap: "20px", // Add gap between columns
+    height: "calc(100vh - 180px)", // Fixed height based on viewport
+    overflow: "hidden", // Hide overflow from container
+    padding: "10px",
   },
   column: {
     width: "48%",
+    height: "100%",
+    overflowY: "auto", // Enable vertical scrolling
+    paddingRight: "8px", // Add space for scrollbar
+    
+    // Scrollbar styling
+    "&::-webkit-scrollbar": {
+      width: "6px",
+    },
+    "&::-webkit-scrollbar-track": {
+      background: "#f1f1f1",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      background: "#888",
+      borderRadius: "4px",
+    },
   },
   card: {
     backgroundColor: "#fff",
     borderRadius: "12px",
     padding: "12px",
     marginBottom: "10px",
-    boxShadow: "0 1px 2px rgba(0,0,0,0.2)",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
     textAlign: "center",
     cursor: "pointer",
+    transition: "transform 0.2s", // Add hover effect
+    "&:hover": {
+      transform: "translateY(-2px)",
+    },
   },
+
   cardText: {
     fontSize: "13px",
     textAlign: "center",
