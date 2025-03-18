@@ -202,8 +202,12 @@ const styles = {
   flexContainer: {
     display: "flex",
     flexDirection: "column",
-    minHeight: "100vh",
+    minHeight: "50vh",
+    width: "100%",
     backgroundColor: "#FFFFFF",
+    borderRadius: "15px",
+    boxShadow: "0px 4px 10px rgba(0,0,0,0.2)",
+
   },
   scrollContainer: {
     flexGrow: 1,
@@ -224,6 +228,7 @@ const styles = {
     color: "#333333",
     textAlign: "center",
     marginBottom: "20px",
+    // padding: "0px 20% 0 20%",
   },
   inputContainer: {
     width: "100%",
@@ -245,7 +250,7 @@ const styles = {
   },
   buttonContainer: {
     padding: "20px",
-    backgroundColor: "#FFFFFF",
+    // backgroundColor: "#FFFFFF",
   },
   button: {
     backgroundColor: "#1E90FF",
