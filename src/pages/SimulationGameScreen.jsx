@@ -45,7 +45,7 @@ const scenarios = [
   {
     id: 3,
     image: scenario3Image,
-    question: "ผู้ป่วยได้รับ Pethidine 3 mg IV ผลข้างเคียงที่สำคัญจากการได้รับยาคือข้อใด?",
+    question: "จากภาพ การพยาบาลที่สำคัญคือข้อใด?",
     options: [
       { text: "ติดตามอาการหัวใจเต้นช้าลง", correct: false },
       { text: "ติดตามระดับน้ำตาลในเลือดต่ำ", correct: false },
@@ -110,7 +110,7 @@ const scenarios = [
   },
   {
     id: 9,
-    image: scenario9Image, // same image as scenario 3
+    image: scenario9Image,
     question: "ผู้ป่วยได้รับ Pethidine 3 mg IV ผลข้างเคียงที่สำคัญคือข้อใด?",
     options: [
       { text: "ท้องเสีย", correct: false },
