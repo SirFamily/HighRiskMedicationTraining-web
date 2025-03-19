@@ -31,7 +31,7 @@ const InstructionScreen = () => {
           className={styles.videoButton}
           onClick={() => {
             playSound();
-            setTimeout(() => navigate("/video"), 300);
+            setTimeout(() => navigate("/matching-game"), 300);
           }}
         >
           🎥 เรียนรู้ผ่านวิดีโอ
