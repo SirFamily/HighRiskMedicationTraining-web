@@ -88,7 +88,8 @@ const DrugMatchingGameScreen = () => {
         setSelectedDrug(null);
       } else {
         await playSound(errorSoundFile);
-        window.alert("❌ ผิด! โปรดลองอีกครั้ง");
+        // Remove the alert here
+        // window.alert("❌ ผิด! โปรดลองอีกครั้ง");
       }
     }
   };
@@ -97,7 +98,7 @@ const DrugMatchingGameScreen = () => {
 
   useEffect(() => {
     if (allMatched && !allMatchedRef.current) {
-      allMatchedRef.current = true; 
+      allMatchedRef.current = true;
       const score = drugPairs.length;
       updateScore("matchingGame", score);
       sessionStorage.setItem("matchingGameScore", score); // Store score in sessionStorage
@@ -157,12 +158,12 @@ const DrugMatchingGameScreen = () => {
         </div>
       </div>
       <ResultModal
-          show={showResultModal}
-          score={drugPairs.length}
-          totalQuestions={drugPairs.length}
-          feedback={"คุณทำแบบทดสอบเสร็จสมบูรณ์แล้ว! เยี่ยมมาก!"}
-          onClose={handleCloseModal}
-        />
+        show={showResultModal}
+        score={drugPairs.length}
+        totalQuestions={drugPairs.length}
+        feedback={"คุณทำแบบทดสอบเสร็จสมบูรณ์แล้ว! เยี่ยมมาก!"}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 };
@@ -202,7 +203,7 @@ const styles = {
     height: "100%",
     overflowY: "auto", // Enable vertical scrolling
     paddingRight: "8px", // Add space for scrollbar
-    
+
     // Scrollbar styling
     "&::-webkit-scrollbar": {
       width: "6px",
