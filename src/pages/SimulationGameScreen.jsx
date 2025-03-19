@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ResultModal from "../components/ResultModal"; // Import ResultModal
 
 // Import images
 import scenario1Image from "../assets/simulation/S__6643720_0.jpg";
@@ -145,6 +146,8 @@ const SimulationGameScreen = () => {
   const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [showResultModal, setShowResultModal] = useState(false); // State for modal
+  const [modalData, setModalData] = useState({}); // Data for modal
   const navigate = useNavigate();
 
   // Function to play a sound effect using the HTML Audio API
@@ -158,16 +161,15 @@ const SimulationGameScreen = () => {
   };
 
   const handleAnswer = async (option, scenarioId) => {
-    // Play button sound when an answer is selected
     await playSound(buttonSound);
 
     const newAnswers = { ...selectedAnswers, [scenarioId]: option };
     setSelectedAnswers(newAnswers);
 
     if (Object.keys(newAnswers).length === scenarios.length) {
-      setTimeout(() => checkAnswers(newAnswers), 500);
+      checkAnswers(newAnswers);
     } else {
-      setTimeout(() => setCurrentScenarioIndex(currentScenarioIndex + 1), 500);
+      setCurrentScenarioIndex(currentScenarioIndex + 1);
     }
   };
 
@@ -180,7 +182,7 @@ const SimulationGameScreen = () => {
       }
     });
     setCorrectAnswers(correctCount);
-    sessionStorage.setItem("simulationGameScore", correctCount); // Add this line
+    sessionStorage.setItem("simulationGameScore", correctCount);
     const percentage = (correctCount / scenarios.length) * 100;
     let feedbackMessage = "ลองศึกษาทบทวนเนื้อหาเพิ่มเติมอีกสักนิดนะ 📚";
     if (percentage >= 80) {
@@ -191,12 +193,18 @@ const SimulationGameScreen = () => {
 
     await playSound(tadaSound);
 
-    window.alert(
-      `📋 สรุปผลการทดสอบ\nคุณตอบถูก ${correctCount}/${scenarios.length} ข้อ\n${feedbackMessage}`
-    );
-    navigate("/post-test");
+    setModalData({
+      score: correctCount,
+      totalQuestions: scenarios.length,
+      feedback: feedbackMessage,
+    });
+    setShowResultModal(true); // Show the modal instead of alert
   };
 
+  const handleModalClose = () => {
+    setShowResultModal(false);
+    navigate("/post-test");
+  };
   return (
     <div style={styles.mainContainer}>
       <div style={styles.container}>
@@ -228,6 +236,13 @@ const SimulationGameScreen = () => {
           ))}
         </div>
       </div>
+      <ResultModal
+        show={showResultModal}
+        score={modalData.score}
+        totalQuestions={modalData.totalQuestions}
+        feedback={modalData.feedback}
+        onClose={handleModalClose}
+      /> {/* Render ResultModal */}
     </div>
   );
 };
