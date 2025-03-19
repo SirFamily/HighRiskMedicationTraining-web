@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background: linear-gradient(135deg, #E3FDFD, #CBF1F5);
+    /* background: linear-gradient(135deg, #E3FDFD, #CBF1F5); */
     text-align: center;
     padding: 20px;
   }
