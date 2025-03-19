@@ -4,16 +4,17 @@ import ResultModal from "../components/ResultModal"; // Import ResultModal
 
 // Import images
 import scenario1Image from "../assets/simulation/S__6643720_0.jpg";
-import scenario2Image from "../assets/simulation/S__6643731_0.jpg";
-import scenario3Image from "../assets/simulation/S__6643732_0.jpg";
-import scenario4Image from "../assets/simulation/S__6643730_0.jpg";
+import scenario2Image from "../assets/simulation/S__6643724_0.jpg";
+import scenario3Image from "../assets/simulation/S__6643726_0.jpg";
+import scenario4Image from "../assets/simulation/S__6643727_0.jpg";
 import scenario5Image from "../assets/simulation/S__6643728_0.jpg";
 import scenario6Image from "../assets/simulation/S__6643729_0.jpg";
-import scenario7Image from "../assets/simulation/S__6643726_0.jpg";
-import scenario8Image from "../assets/simulation/S__6643727_0.jpg";
+import scenario7Image from "../assets/simulation/S__6643730_0.jpg";
+import scenario8Image from "../assets/simulation/S__6643731_0.jpg";
+import scenario9Image from "../assets/simulation/S__6643732_0.jpg";
 import scenario10Image from "../assets/simulation/S__6643733_0.jpg";
 import scenario11Image from "../assets/simulation/S__6643734_0.jpg";
-
+import scenario12Image from "../assets/simulation/S__6643735_0.jpg";
 // Import sound files
 import buttonSound from "../assets/audio/sound-effect/comedy_pop_finger_in_mouth_001.mp3";
 import tadaSound from "../assets/audio/sound-effect/ta-da_yrvBrlS.mp3";
@@ -33,12 +34,12 @@ const scenarios = [
   {
     id: 2,
     image: scenario2Image,
-    question: "การพยาบาลที่เหมาะสมสำหรับผู้ป่วยภาวะ Hypokalemia คือข้อใด?",
+    question: "จากภาพ การพยาบาลที่สำคัญคือข้อใด?",
     options: [
-      { text: "ให้ดื่มน้ำมาก ๆ เพื่อเพิ่มระดับโพแทสเซียม", correct: false },
-      { text: "ให้ IV KCl ทางหลอดเลือดดำแบบฉีดเร็วเพื่อลดภาวะอ่อนแรง", correct: false },
-      { text: "ให้ยาโพแทสเซียมเสริมตามแผนการรักษา และติดตามระดับโพแทสเซียมอย่างใกล้ชิด", correct: true },
-      { text: "จำกัดอาหารที่มีโพแทสเซียม เช่น กล้วย, ส้ม, มันฝรั่ง", correct: false },
+      { text: "ใให้ผู้ป่วยนอนพัก จัดท่าศีรษะสูงและประเมิน V/S", correct: false },
+      { text: "ให้ผู้ป่วยนั่งพัก 5 นาทีแล้วมาวัดความดันโลหิตซ้ำอีกครั้ง", correct: false },
+      { text: "ติดตาม V/S ทุกๆ 15 นาทีหลังได้รับยาเพื่อเฝ้าระวังหัวใจเต้นเร็ว", correct: true },
+      { text: "ถูกทุกข้อ", correct: false },
     ],
   },
   {
@@ -46,27 +47,27 @@ const scenarios = [
     image: scenario3Image,
     question: "ผู้ป่วยได้รับ Pethidine 3 mg IV ผลข้างเคียงที่สำคัญจากการได้รับยาคือข้อใด?",
     options: [
-      { text: "ท้องเสีย", correct: false },
-      { text: "หายใจลำบาก, กดการหายใจ", correct: true },
-      { text: "ภาวะน้ำตาลในเลือดต่ำ", correct: false },
-      { text: "หัวใจเต้นเร็ว, ความดันโลหิตสูง", correct: false },
+      { text: "ติดตามอาการหัวใจเต้นช้าลง", correct: false },
+      { text: "ติดตามระดับน้ำตาลในเลือดต่ำ", correct: false },
+      { text: "ติดตามอาการและเฝ้าระวังอาการหายใจช้า", correct: false },
+      { text: "ติดตาม V/S ทุกๆ 15 นาทีหลังได้รับยาและสังเกตอาการ Extravasation", correct: true },
     ],
   },
   {
     id: 4,
     image: scenario4Image,
-    question: "ข้อใดเป็นข้อบ่งใช้หลักของยา Magnesium Sulfate ในทางสูติศาสตร์?",
+    question: "จากภาพการพยาบาลที่สำคัญคือข้อใด?",
     options: [
-      { text: "ลดอาการคลื่นไส้อาเจียนในหญิงตั้งครรภ์", correct: false },
-      { text: "ป้องกันและรักษาภาวะชักจากครรภ์เป็นพิษ (Pre-eclampsia)", correct: true },
-      { text: "กระตุ้นการหดรัดตัวของมดลูก", correct: false },
-      { text: "รักษาภาวะความดันโลหิตต่ำ", correct: false },
+      { text: "แนะนำให้ผู้ป่วยงดอาหารอย่างน้อย 2 ชั่วโมงหลังได้รับยา", correct: false },
+      { text: "เฝ้าระวังอาการน้ำตาลในเลือดต่ำ (Hypoglycemia)", correct: true },
+      { text: "ให้ผู้ป่วยออกกำลังกายทันทีหลังได้รับยาเพื่อลดระดับน้ำตาลในเลือด", correct: false },
+      { text: "งดตรวจระดับน้ำตาลในเลือดหลังได้รับยา", correct: false },
     ],
   },
   {
     id: 5,
     image: scenario5Image,
-    question: "จากภาพ EKG : AF with RVR rate 200/min จากภาพ การพยาบาลที่สำคัญคือข้อใด?",
+    question: " EKG : AF with RVR rate 200/min และ จากภาพ การพยาบาลที่สำคัญคือข้อใด?",
     options: [
       { text: "ติด EKG ดูคลื่นหัวใจอีกรอบและรายงานแพทย์", correct: false },
       { text: "รายงานแพทย์ให้ยา Adrenaline และติดตามอาการทุกๆ 15 นาที", correct: false },
@@ -77,10 +78,10 @@ const scenarios = [
   {
     id: 6,
     image: scenario6Image,
-    question: "จากภาพ EKG : AF with RVR rate 200/min การพยาบาลที่สำคัญคือข้อใด?",
+    question: "จากภาพ การพยาบาลที่สำคัญคือข้อใด?",
     options: [
       { text: "ให้ผู้ป่วยนอนพักจัดท่านอนยกขาสูงและประเมิน V/S และประเมินซ้ำอีก 1 ชั่วโมง", correct: false },
-      { text: "ให้ผู้ป่วยนั่งพัก นาที จัดท่านอนศีรษะสูงและวัด V/S ทุก 4 ชั่วโมง", correct: false },
+      { text: "ให้ผู้ป่วยนั่งพัก 5 นาที จัดท่านอนศีรษะสูงและวัด V/S ทุก 4 ชั่วโมง", correct: false },
       { text: "รายงานแพทย์ให้ยา Dopamine และติดตาม V/S ทุกๆ 15 นาทีหลังให้ยา", correct: false },
       { text: "รายงานแพทย์ให้ยา Nicardipine และติดตาม V/S ทุกๆ 15 นาทีหลังให้ยา", correct: true },
     ],
@@ -88,28 +89,28 @@ const scenarios = [
   {
     id: 7,
     image: scenario7Image,
-    question: "จากภาพ การพยาบาลที่สำคัญคือข้อใด?",
+    question: "ข้อใดเป็นข้อบ่งใช้หลักของยา 50% Magnesium Sulfate ในทางสูติศาสตร์",
     options: [
-      { text: "ติดตามอาการหัวใจเต้นช้าลง", correct: false },
-      { text: "ติดตามระดับน้ำตาลในเลือดต่ำ", correct: false },
-      { text: "ติดตามอาการและเฝ้าระวังอาการหายใจช้า", correct: false },
-      { text: "ติดตาม V/S ทุกๆ 15 นาทีหลังได้รับยาและสังเกตอาการ Extravasation", correct: true },
+      { text: "ลดอาการคลื่นไส้อาเจียนในหญิงตั้งครรภ์", correct: false },
+      { text: "ป้องกันและรักษาภาวะชักจากครรภ์เป็นพิษ (Pre-eclampsia)", correct: true },
+      { text: "กระตุ้นการหดรัดตัวของมดลูก", correct: false },
+      { text: "รักษาภาวะความดันโลหิตต่ำ", correct: false },
     ],
   },
   {
     id: 8,
     image: scenario8Image,
-    question: "จากภาพ การพยาบาลที่สำคัญคือข้อใด?",
+    question: "การพยาบาลที่เหมาะสมสำหรับผู้ป่วยภาวะ Hypokalemia คือข้อใด",
     options: [
-      { text: "แนะนำให้ผู้ป่วยงดอาหารอย่างน้อย 2 ชั่วโมงหลังได้รับยา", correct: false },
-      { text: "เฝ้าระวังอาการน้ำตาลในเลือดต่ำ (Hypoglycemia)", correct: true },
-      { text: "ให้ผู้ป่วยออกกำลังกายทันทีหลังได้รับยาเพื่อลดระดับน้ำตาลในเลือด", correct: false },
-      { text: "งดตรวจระดับน้ำตาลในเลือดหลังได้รับยา", correct: false },
+      { text: "ให้ดื่มน้ำมาก ๆ เพื่อเพิ่มระดับโพแทสเซียม", correct: false },
+      { text: "ให้ IV KCl ทางหลอดเลือดดำแบบฉีดเร็วเพื่อลดภาวะอ่อนแรง", correct: false },
+      { text: "ให้ยาโพแทสเซียมเสริมตามแผนการรักษา และติดตามระดับโพแทสเซียมอย่างใกล้ชิด", correct: true },
+      { text: "จำกัดอาหารที่มีโพแทสเซียม เช่น กล้วย, ส้ม, มันฝรั่ง", correct: false },
     ],
   },
   {
     id: 9,
-    image: scenario3Image, // same image as scenario 3
+    image: scenario9Image, // same image as scenario 3
     question: "ผู้ป่วยได้รับ Pethidine 3 mg IV ผลข้างเคียงที่สำคัญคือข้อใด?",
     options: [
       { text: "ท้องเสีย", correct: false },
@@ -121,7 +122,7 @@ const scenarios = [
   {
     id: 10,
     image: scenario10Image,
-    question: "จากภาพ การพยาบาลควรเฝ้าระวังอาการข้างเคียงที่สำคัญในข้อใด?",
+    question: "จากภาพการพยาบาลควรเฝ้าระวังอาการข้างเคียงที่สำคัญในข้อใด?",
     options: [
       { text: "อาการท้องผูกและคลื่นไส้", correct: false },
       { text: "อาการหายใจช้าและความดันโลหิตต่ำ", correct: true },
@@ -138,6 +139,17 @@ const scenarios = [
       { text: "ติดตามระดับ pH และอิเล็กโทรไลต์ในเลือดเพื่อตรวจสอบภาวะเลือดเป็นด่าง (Metabolic Alkalosis)", correct: true },
       { text: "ลดการให้สารน้ำทางหลอดเลือดดำเพื่อลดการขับโซเดียมออกจากร่างกาย", correct: false },
       { text: "กระตุ้นให้ผู้ป่วยดื่มน้ำมาก ๆ เพื่อลดการดูดซึมของยาในกระเพาะอาหาร", correct: false },
+    ],
+  },
+  {
+    id: 12,
+    image: scenario12Image,
+    question: "ผู้ป่วยที่ได้รับยา Morphine การพยาบาลที่สำคัญคือข้อใด",
+    options: [
+      { text: "สังเกตดูอาการหายใจช้า ปวดศีรษะ คลื่นไส้อาเจียน", correct: true },
+      { text: "วัด V/S ทุก 30 นาที และนอนพักบนเตียง", correct: false },
+      { text: "สังเกตอาการเหงื่อออก ใจสั่น", correct: false },
+      { text: "สังเกตและประเมินภาวะหัวใจเต้นช้า", correct: false },
     ],
   },
 ];
