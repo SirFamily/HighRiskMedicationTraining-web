@@ -3,6 +3,8 @@ import Confetti from "react-confetti"; // Ensure to install this package
 import trophyImg from "../assets/trophy.png";
 import linkImg from "../assets/link.png";
 import certificateSound from "../assets/audio/sound-effect/gen-prbmuue.mp3";
+import homeButtonSound from "../assets/audio/sound-effect/comedy_pop_finger_in_mouth_001.mp3"; // Add your home button sound file here
+import CertificateModal from "../components/CertificateModal"; // Import ResultModal
 
 const CertificateScreen = () => {
   const [fullName, setFullName] = useState("");
@@ -14,6 +16,8 @@ const CertificateScreen = () => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [showResultModalX, setShowResultModalX] = useState(false);
 
   useEffect(() => {
     const handleResize = () =>
@@ -86,6 +90,25 @@ const CertificateScreen = () => {
     }
   };
 
+  const handleGoHome = async () => {
+    await playSound(homeButtonSound); // Play sound before showing modal
+
+    setShowResultModal(true); // Show ResultModal on click
+  };
+
+  const handleModalCloseX = async () => {
+    await playSound(homeButtonSound); // Play sound before showing modal
+
+    setShowResultModal(false);
+  };
+  const handleModalClose = async () => {
+    await playSound(homeButtonSound); // Play sound before showing modal
+    setShowResultModal(false);
+    sessionStorage.clear();
+    // เรียกฟังก์ชัน replace() แทนการกำหนด property
+    window.location.replace("/");
+  };
+
   return (
     <div style={styles.container}>
       {showConfetti && (
@@ -136,6 +159,15 @@ const CertificateScreen = () => {
           </button>
         </div>
       )}
+      <button style={styles.certificateButton} onClick={handleGoHome}>
+        <span style={styles.linkText}>กลับไปหน้าหลัก</span>
+      </button>
+      <CertificateModal
+        show={showResultModal}
+        onClose={handleModalClose}
+        onCloseX={handleModalCloseX}
+        message={"ขอแสดงความยินดี! คุณได้รับเกียรติบัตรแล้ว"} //Example message
+      />
     </div>
   );
 };
@@ -179,7 +211,7 @@ const styles = {
     marginBottom: "20px",
     animation: "bounce 1s infinite",
   },
-  
+
   certificateButton: {
     backgroundColor: "#2980B9",
     padding: "15px 35px",
