@@ -7,21 +7,18 @@ import buttonSound from "../assets/audio/sound-effect/comedy_pop_finger_in_mouth
 import scoreSound from "../assets/audio/sound-effect/ta-da_yrvBrlS.mp3";
 
 const questions = [
-  { id: 1, question: "Adrenaline ใช้ในการฟื้นคืนชีพหัวใจหยุดเต้น?", correct: true },
-  { id: 2, question: "Dopamine ใช้บรรเทาอาการปวด?", correct: false },
-  { id: 3, question: "Fentanyl เป็นยาสลบ?", correct: false },
-  { id: 4, question: "Magnesium sulfate ใช้ป้องกันอาการชักจากครรภ์เป็นพิษ?", correct: true },
-  { id: 5, question: "Morphine เป็นยาที่ช่วยเพิ่มความดันโลหิต?", correct: false },
-  { id: 6, question: "Insulin ใช้รักษาภาวะน้ำตาลในเลือดต่ำ?", correct: false },
-  { id: 7, question: "Heparin เป็นยาป้องกันการแข็งตัวของเลือด?", correct: true },
-  { id: 8, question: "Warfarin ออกฤทธิ์ทันทีหลังให้ยา?", correct: false },
-  { id: 9, question: "Digoxin ใช้รักษาภาวะหัวใจเต้นช้า?", correct: false },
-  { id: 10, question: "Potassium chloride ใช้รักษาภาวะโพแทสเซียมในเลือดต่ำ?", correct: true },
-  { id: 11, question: "Norepinephrine ใช้เพิ่มความดันโลหิต?", correct: true },
-  { id: 12, question: "Calcium gluconate ใช้แก้พิษจากภาวะแมกนีเซียมเกิน?", correct: true },
-  { id: 13, question: "Midazolam เป็นยาคลายกังวล", correct: true },
-  { id: 14, question: "Amiodarone ใช้รักษาหัวใจเต้นผิดจังหวะ?", correct: true },
-  { id: 15, question: "Protamine sulfate เป็นยาแก้พิษ Warfarin?", correct: false },
+  { id: 1, question: "7.5% Sodium Bicarbonate ใช้ในการรักษาภาวะกรดในเลือด (Metabolic Acidosis) ที่เกิดจากโรคไตล้มเหลวได้?", correct: true },  
+  { id: 2, question: "Fentanyl เป็นยาในกลุ่ม opioid ที่ใช้บรรเทาปวดรุนแรงได้?", correct: true },  
+  { id: 3, question: "Adrenaline ทำให้หลอดเลือดขยายตัว ช่วยเพิ่มการไหลเวียนของเลือด?", correct: false },  
+  { id: 4, question: "Dopamine ใช้ในการรักษาภาวะหัวใจหยุดเต้นและความดันโลหิตต่ำ?", correct: false },  
+  { id: 5, question: "Nicardipine สามารถใช้ในการรักษาภาวะหัวใจล้มเหลว?", correct: false },  
+  { id: 6, question: "Regular Insulin ช่วยเพิ่มระดับน้ำตาลโดยกระตุ้นให้ตับปล่อยกลูโคสออกมา?", correct: false },  
+  { id: 7, question: "ยา Morphine (MO) อาจทำให้เกิดอาการคลื่นไส้และอาเจียน?", correct: true },  
+  { id: 8, question: "อาการท้องเสียและปวดศีรษะเป็นอาการข้างเคียงของ Pethidine?", correct: false },  
+  { id: 9, question: "การใช้ Potassium chloride (KCl) เหมาะในการรักษาผู้ป่วยที่มีภาวะโพแทสเซียมสูงในเลือด?", correct: false },  
+  { id: 10, question: "Magnesium sulfate ใช้ในการรักษาผู้ป่วยที่มีภาวะการตั้งครรภ์ที่มีความเสี่ยงต่อการชักจากภาวะครรภ์เป็นพิษ?", correct: true },  
+  { id: 11, question: "การใช้ Amiodarone ใช้รักษาภาวะหัวใจเต้นผิดจังหวะ?", correct: true },  
+  { id: 12, question: "Norepinephrine (Levophed) ใช้รักษาผู้ป่วยที่มีภาวะความดันโลหิตต่ำ?", correct: true }  
 ];
 
 const PreTestScreen = () => {
