@@ -24,18 +24,18 @@ import fentanylSound from "../assets/audio/drug-names/Fentanyl.mp3";
 import sodiumBicarbonateSound from "../assets/audio/drug-names/Sodium_Bicarbonate.mp3";
 
 const drugNames = [
-//   { name: "Epinephrine", sound: epinephrineSound },
+  { name: "Epinephrine", sound: epinephrineSound },
   { name: "Dopamine", sound: dopamineSound },
-//   { name: "Levophed", sound: levophedSound },
-//   { name: "Amiodarone", sound: amiodaroneSound },
-//   { name: "Nicardipine", sound: nicardipineSound },
-//   { name: "Morphine", sound: morphineSound },
-//   { name: "Pethidine", sound: pethidineSound },
-//   { name: "Insulin", sound: insulinSound },
-//   { name: "Potassium chloride", sound: potassiumChlorideSound },
-//   { name: "Magnesium sulfate", sound: magnesiumSulfateSound },
-//   { name: "Fentanyl", sound: fentanylSound },
-//   { name: "Sodium Bicarbonate", sound: sodiumBicarbonateSound },
+  { name: "Levophed", sound: levophedSound },
+  { name: "Amiodarone", sound: amiodaroneSound },
+  { name: "Nicardipine", sound: nicardipineSound },
+  { name: "Morphine", sound: morphineSound },
+  { name: "Pethidine", sound: pethidineSound },
+  { name: "Insulin", sound: insulinSound },
+  { name: "Potassium chloride", sound: potassiumChlorideSound },
+  { name: "Magnesium sulfate", sound: magnesiumSulfateSound },
+  { name: "Fentanyl", sound: fentanylSound },
+  { name: "Sodium Bicarbonate", sound: sodiumBicarbonateSound },
 ];
 
 const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);

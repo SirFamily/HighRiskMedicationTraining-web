@@ -27,16 +27,16 @@ import tadaSoundFile from "../assets/audio/sound-effect/ta-da_yrvBrlS.mp3";
 const drugPairs = [
   { drug: "Adrenaline(Epinephrine)", use: "ฟื้นคืนชีพหัวใจหยุดเต้น", image: adrenalineImg },
   { drug: "Dopamine", use: "เพิ่มความดันโลหิต", image: dopamineImg },
-  // { drug: "Norepinephrine(Levophed)", use: "รักษาภาวะช็อกจากความดันต่ำ", image: norepinephrineImg },
-  // { drug: "Amiodarone", use: "หัวใจเต้นผิดจังหวะ", image: amiodaroneImg },
-  // { drug: "Nicardipine", use: "รักษาความดันโลหิตสูง", image: nicardipineImg },
-  // { drug: "Morphine(MO)", use: "บรรเทาอาการปวดรุนแรง", image: morphineImg },
-  // { drug: "Pethidine", use: "บรรเทาอาการปวดปานกลาง", image: pethidineImg },
-  // { drug: "Fentanyl", use: "ปวดรุนแรงมาก เช่น ปวดมะเร็ง", image: fentanylImg },
-  // { drug: "Potassium chloride (KCL)", use: "โพแทสเซียมต่ำในเลือด", image: potassiumImg },
-  // { drug: "Magnesium sulfate", use: "ป้องกันชักจากครรภ์เป็นพิษ", image: magnesiumImg },
-  // { drug: "Regular insulin", use: "เบาหวานชนิดที่ 1 และ 2", image: insulinImg },
-  // { drug: "7.5% Sodium Bicarbonate", use: "รักษาภาวะเลือดเป็นกรด", image: sodiumBicarbImg },
+  { drug: "Norepinephrine(Levophed)", use: "รักษาภาวะช็อกจากความดันต่ำ", image: norepinephrineImg },
+  { drug: "Amiodarone", use: "หัวใจเต้นผิดจังหวะ", image: amiodaroneImg },
+  { drug: "Nicardipine", use: "รักษาความดันโลหิตสูง", image: nicardipineImg },
+  { drug: "Morphine(MO)", use: "บรรเทาอาการปวดรุนแรง", image: morphineImg },
+  { drug: "Pethidine", use: "บรรเทาอาการปวดปานกลาง", image: pethidineImg },
+  { drug: "Fentanyl", use: "ปวดรุนแรงมาก เช่น ปวดมะเร็ง", image: fentanylImg },
+  { drug: "Potassium chloride (KCL)", use: "โพแทสเซียมต่ำในเลือด", image: potassiumImg },
+  { drug: "Magnesium sulfate", use: "ป้องกันชักจากครรภ์เป็นพิษ", image: magnesiumImg },
+  { drug: "Regular insulin", use: "เบาหวานชนิดที่ 1 และ 2", image: insulinImg },
+  { drug: "7.5% Sodium Bicarbonate", use: "รักษาภาวะเลือดเป็นกรด", image: sodiumBicarbImg },
 ];
 
 const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
