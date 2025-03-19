@@ -27,15 +27,15 @@ import tadaSoundFile from "../assets/audio/sound-effect/ta-da_yrvBrlS.mp3";
 const drugPairs = [
   { drug: "Adrenaline(Epinephrine)", use: "ฟื้นคืนชีพหัวใจหยุดเต้น", image: adrenalineImg },
   { drug: "Dopamine", use: "เพิ่มความดันโลหิต", image: dopamineImg },
-  { drug: "Norepinephrine(Levophed)", use: "รักษาภาวะช็อกจากความดันต่ำ", image: norepinephrineImg },
-  { drug: "Amiodarone", use: "หัวใจเต้นผิดจังหวะ", image: amiodaroneImg },
-  { drug: "Nicardipine", use: "รักษาความดันโลหิตสูง", image: nicardipineImg },
+  { drug: "Norepinephrine(Levophed)", use: "รักษาภาวะช็อกในกรณีที่ให้สารน้ำทดแทนเพียงพอแล้วอาการไม่ดีขึ้น", image: norepinephrineImg },
+  { drug: "Amiodarone", use: "Atrial fibrillation with rapid ventricular response", image: amiodaroneImg },
+  { drug: "Nicardipine", use: "บรรเทาอาการปวดแบบเฉียบพลันและเรื้อรัง เช่น หลังผ่าตัดหรือจากโรคมะเร็ง และ myocardial infarction รักษาภาวะ Acute pulmonary edema ที่เกิดจาก left ventricular failure", image: nicardipineImg },
   { drug: "Morphine(MO)", use: "บรรเทาอาการปวดรุนแรง", image: morphineImg },
-  { drug: "Pethidine", use: "บรรเทาอาการปวดปานกลาง", image: pethidineImg },
-  { drug: "Fentanyl", use: "ปวดรุนแรงมาก เช่น ปวดมะเร็ง", image: fentanylImg },
-  { drug: "Potassium chloride (KCL)", use: "โพแทสเซียมต่ำในเลือด", image: potassiumImg },
-  { drug: "Magnesium sulfate", use: "ป้องกันชักจากครรภ์เป็นพิษ", image: magnesiumImg },
-  { drug: "Regular insulin", use: "เบาหวานชนิดที่ 1 และ 2", image: insulinImg },
+  { drug: "Pethidine", use: "Pain (Moderate to Severe)", image: pethidineImg },
+  { drug: "Fentanyl", use: "บรรเทาอาการปวดรุนแรง เช่น ปวดจากมะเร็ง ปวดหลังการผ่าตัด ปวดจากอุบัติเหตุรุนแรง", image: fentanylImg },
+  { drug: "Potassium chloride (KCL)", use: "ภาวะ hypokalemia", image: potassiumImg },
+  { drug: "Magnesium sulfate", use: "Hypomagnesemia, Torsades de Pointes ป้องกันและรักษาภาวะชักจากครรภ์เป็นพิษ (Preeclampsia)", image: magnesiumImg },
+  { drug: "Regular insulin", use: "Type 1 diabetes mellitus, Type 2 diabetes mellitus", image: insulinImg },
   { drug: "7.5% Sodium Bicarbonate", use: "รักษาภาวะเลือดเป็นกรด", image: sodiumBicarbImg },
 ];
 
