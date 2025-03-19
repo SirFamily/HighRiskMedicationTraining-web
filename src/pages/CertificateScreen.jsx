@@ -1,27 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
-// import { useName } from "../contexts/NameContext";
-import Confetti from "react-confetti"; // Make sure to install this package: npm install react-confetti
-
-// Import images and audio files
+import Confetti from "react-confetti"; // Ensure to install this package
 import trophyImg from "../assets/trophy.png";
 import linkImg from "../assets/link.png";
 import certificateSound from "../assets/audio/sound-effect/gen-prbmuue.mp3";
 
 const CertificateScreen = () => {
-  // const { firstName, lastName } = useName(); // Remove this line
-  // const fullName = `${firstName} ${lastName}`; // Remove this line
-  const [fullName, setFullName] = useState(""); // Add this line
+  const [fullName, setFullName] = useState("");
   const [pdfUrl, setPdfUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [sound, setSound] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
-  // We'll use a ref to store the window dimensions for confetti
   const [windowDimensions, setWindowDimensions] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
 
-  // Fetch window dimensions on resize
   useEffect(() => {
     const handleResize = () =>
       setWindowDimensions({
@@ -32,7 +25,6 @@ const CertificateScreen = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Load name from session storage on component mount
   useEffect(() => {
     const storedFirstName = sessionStorage.getItem("firstName");
     const storedLastName = sessionStorage.getItem("lastName");
@@ -41,12 +33,10 @@ const CertificateScreen = () => {
     }
   }, []);
 
-  // Fetch certificate data from Google Script
   const fetchCertificate = async () => {
     setLoading(true);
     const url =
       "https://script.google.com/macros/s/AKfycbww9pbG0AV5oaCVh8wRwigFDYXe3R-YJLxzFzulTAqPNxkReh_BHibGVlfVuY4qro-N1Q/exec?action=getUsers";
-
     try {
       const response = await fetch(url);
       const json = await response.json();
@@ -78,7 +68,6 @@ const CertificateScreen = () => {
     }
   }, [fullName]);
 
-  // Play certificate sound after a delay when pdfUrl is available
   useEffect(() => {
     if (pdfUrl) {
       setTimeout(async () => {
@@ -87,7 +76,6 @@ const CertificateScreen = () => {
     }
   }, [pdfUrl]);
 
-  // Play sound using the HTML Audio API
   const playSound = async (soundFile) => {
     try {
       const audio = new Audio(soundFile);
@@ -104,14 +92,13 @@ const CertificateScreen = () => {
         <Confetti
           width={windowDimensions.width}
           height={windowDimensions.height}
-          numberOfPieces={200}
+          numberOfPieces={250}
           recycle={false}
+          gravity={0.3}
         />
       )}
 
-      {/* Trophy image with bounce animation */}
       <img src={trophyImg} alt="Trophy" style={styles.trophyIcon} />
-
       <h1 style={styles.title}>🏆 เกียรติบัตร</h1>
       <p style={styles.congrats}>🎉 ขอแสดงความยินดี!</p>
       <p style={styles.name}>{fullName}</p>
@@ -161,44 +148,51 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     padding: "20px",
-    background: "linear-gradient(to bottom right, #FFDEE9, #B5FFFC)",
+    // background: "linear-gradient(to top left, #FFDEE9, #B5FFFC)",
   },
   title: {
-    fontSize: "32px",
+    fontSize: "36px",
     fontWeight: "800",
     color: "#2C3E50",
     marginBottom: "10px",
-    textShadow: "2px 2px 5px rgba(0,0,0,0.1)",
+    textShadow: "3px 3px 5px rgba(0,0,0,0.2)",
+    fontFamily: "'Roboto', sans-serif",
   },
   congrats: {
-    fontSize: "24px",
+    fontSize: "28px",
     color: "#27AE60",
     fontWeight: "600",
     marginBottom: "5px",
   },
   name: {
-    fontSize: "28px",
+    fontSize: "32px",
     fontWeight: "700",
     color: "#E74C3C",
     marginBottom: "30px",
     textAlign: "center",
     textShadow: "1px 1px 3px rgba(231,76,60,0.2)",
+    fontFamily: "'Roboto', sans-serif",
   },
   trophyIcon: {
-    width: "100px",
-    height: "100px",
+    width: "120px",
+    height: "120px",
     marginBottom: "20px",
-    transform: "rotate(-15deg)",
     animation: "bounce 1s infinite",
   },
+  
   certificateButton: {
     backgroundColor: "#2980B9",
-    padding: "15px 30px",
-    borderRadius: "25px",
+    padding: "15px 35px",
+    borderRadius: "30px",
     marginBottom: "20px",
     border: "none",
     cursor: "pointer",
-    boxShadow: "0 2px 3px rgba(0,0,0,0.3)",
+    boxShadow: "0 6px 12px rgba(0, 0, 0, 0.2)",
+    transition: "all 0.3s ease",
+  },
+  certificateButtonHover: {
+    transform: "scale(1.05)",
+    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.3)",
   },
   buttonContent: {
     display: "flex",
@@ -207,9 +201,8 @@ const styles = {
   },
   linkText: {
     color: "white",
-    fontSize: "18px",
+    fontSize: "20px",
     fontWeight: "600",
-    letterSpacing: "0.5px",
   },
   error: {
     fontSize: "18px",
@@ -219,12 +212,13 @@ const styles = {
   },
   refreshButton: {
     backgroundColor: "#7F8C8D",
-    padding: "15px",
-    borderRadius: "20px",
+    padding: "15px 40px",
+    borderRadius: "25px",
     border: "none",
     cursor: "pointer",
     display: "flex",
     alignItems: "center",
+    transition: "all 0.3s ease",
   },
   refreshButtonText: {
     color: "white",
@@ -252,14 +246,14 @@ const styles = {
   },
 };
 
-// Inject keyframes for bounce and spin animations into the document head
 const styleSheet = document.createElement("style");
 styleSheet.type = "text/css";
 styleSheet.innerText = `
 @keyframes bounce {
-  0%, 100% { transform: translateY(0) rotate(-15deg); }
-  50% { transform: translateY(-15px) rotate(-15deg); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
 }
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
