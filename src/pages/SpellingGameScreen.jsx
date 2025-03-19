@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ResultModal from '../components/ResultModal'; // Import ResultModal
 
 // Import sound-effect files
 import newFollowerSound from "../assets/audio/sound-effect/new-follower_62zQLKz.mp3";
@@ -47,6 +48,8 @@ const SpellingGameScreen = () => {
   const [usedIndexes, setUsedIndexes] = useState(new Set());
   const [completedWords, setCompletedWords] = useState([]);
   const [isLastWord, setIsLastWord] = useState(false);
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [score, setScore] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -104,18 +107,14 @@ const SpellingGameScreen = () => {
         setTimeout(async () => {
           await playDrugSoundEffect(lastDrugData.sound);
           setTimeout(() => {
-            window.alert(
-              "🎉 คุณทำครบทุกคำแล้ว! ยินดีด้วย คุณทำแบบฝึกหัดสะกดคำครบถ้วนแล้ว!"
-            );
-            navigate("/simulation-game");
+            setScore(drugNames.length);
+            setShowResultModal(true);
           }, 400);
         }, 400);
       } else {
         setTimeout(() => {
-          window.alert(
-            "🎉 คุณทำครบทุกคำแล้ว! ยินดีด้วย คุณทำแบบฝึกหัดสะกดคำครบถ้วนแล้ว!"
-          );
-          navigate("/simulation-game");
+          setScore(drugNames.length);
+          setShowResultModal(true);
         }, 400);
       }
       return;
@@ -166,18 +165,14 @@ const SpellingGameScreen = () => {
           setTimeout(async () => {
             await playDrugSoundEffect(currentDrugData.sound);
             setTimeout(() => {
-              window.alert(
-                "🎉 คุณทำครบทุกคำแล้ว! ยินดีด้วย คุณทำแบบฝึกหัดสะกดคำครบถ้วนแล้ว!"
-              );
-              navigate("/simulation-game");
+              setScore(drugNames.length);
+              setShowResultModal(true);
             }, 400);
           }, 400);
         } else {
           setTimeout(() => {
-            window.alert(
-              "🎉 คุณทำครบทุกคำแล้ว! ยินดีด้วย คุณทำแบบฝึกหัดสะกดคำครบถ้วนแล้ว!"
-            );
-            navigate("/simulation-game");
+            setScore(drugNames.length);
+            setShowResultModal(true);
           }, 400);
         }
       } else {
@@ -186,14 +181,19 @@ const SpellingGameScreen = () => {
           if (currentDrugData && currentDrugData.sound) {
             await playDrugSoundEffect(currentDrugData.sound);
           }
-          window.alert(`✅ ถูกต้อง! คุณสะกด "${currentDrug}" ได้ถูกต้อง 🎉`);
+          // window.alert(`✅ ถูกต้อง! คุณสะกด "${currentDrug}" ได้ถูกต้อง 🎉`); // Remove alert
           startNewRound();
         }, 400);
       }
     } else {
       playSoundEffect(errorSound);
-      window.alert("❌ ผิด! ลองเรียงตัวอักษรใหม่อีกครั้ง!");
+      // window.alert("❌ ผิด! ลองเรียงตัวอักษรใหม่อีกครั้ง!"); // Remove alert
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowResultModal(false);
+    navigate("/simulation-game");
   };
 
   return (
@@ -236,6 +236,13 @@ const SpellingGameScreen = () => {
           🔄 สุ่มคำใหม่
         </button>
       </div>
+      <ResultModal
+        show={showResultModal}
+        score={score}
+        totalQuestions={drugNames.length}
+        feedback={"คุณทำแบบทดสอบเสร็จสมบูรณ์แล้ว! เยี่ยมมาก!"}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 };
