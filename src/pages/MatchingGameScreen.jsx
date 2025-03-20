@@ -50,6 +50,7 @@ const DrugMatchingGameScreen = () => {
   const { updateScore } = useName();
   const [showResultModal, setShowResultModal] = useState(false); // Add state for modal
   const allMatchedRef = useRef(false); // Use ref to track if all matched
+  const [wrongSelection, setWrongSelection] = useState(null);
 
   // Play sound using the HTML Audio API
   const playSound = async (soundFile) => {
@@ -72,6 +73,7 @@ const DrugMatchingGameScreen = () => {
     setDrugs(shuffleArray([...drugPairs]));
     setUses(shuffleArray([...drugPairs]));
     allMatchedRef.current = false; // Reset the ref when shuffling
+    setWrongSelection(null);
   };
 
   const handleSelect = async (item, type) => {
@@ -86,10 +88,13 @@ const DrugMatchingGameScreen = () => {
         await playSound(correctSoundFile);
         setMatches((prev) => ({ ...prev, [selectedDrug]: item }));
         setSelectedDrug(null);
+        setWrongSelection(null);
       } else {
         await playSound(errorSoundFile);
-        // Remove the alert here
-        // window.alert("❌ ผิด! โปรดลองอีกครั้ง");
+        setWrongSelection(item);
+        setTimeout(() => {
+          setWrongSelection(null);
+        }, 500);
       }
     }
   };
@@ -144,6 +149,7 @@ const DrugMatchingGameScreen = () => {
             const cardStyle = {
               ...styles.card,
               ...(Object.values(matches).includes(use) ? styles.matchedCard : {}),
+              ...(wrongSelection === use ? styles.wrongCard : {}),
             };
             return (
               <div
@@ -224,7 +230,7 @@ const styles = {
     boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
     textAlign: "center",
     cursor: "pointer",
-    transition: "transform 0.2s", // Add hover effect
+    transition: "transform 0.2s, background-color 0.2s", // Add hover effect and background-color transition
     "&:hover": {
       transform: "translateY(-2px)",
     },
@@ -241,6 +247,10 @@ const styles = {
   },
   matchedCard: {
     backgroundColor: "#dcedc8",
+  },
+  wrongCard: {
+    backgroundColor: "#ffdddd", // Light red background
+    animation: "wrong-selection 0.5s ease-in-out",
   },
   nextButton: {
     backgroundColor: "#3498db",
