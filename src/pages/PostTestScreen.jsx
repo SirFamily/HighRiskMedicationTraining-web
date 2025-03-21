@@ -1,25 +1,27 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useName } from "../contexts/NameContext";
+import ResultModal from "../components/ResultModal"; // Import ResultModal
 
 // Import sound files
 import buttonSound from "../assets/audio/sound-effect/comedy_pop_finger_in_mouth_001.mp3";
 import tadaSound from "../assets/audio/sound-effect/ta-da_yrvBrlS.mp3";
 import failedSound from "../assets/audio/sound-effect/gssspotted-haayaicchluek-khrabhaayaicchluek.mp3";
 
-const questions = [
+// Define original question array
+const originalQuestions = [
   { id: 1, question: "7.5% Sodium Bicarbonate ใช้ในการรักษาภาวะกรดในเลือด (Metabolic Acidosis) ที่เกิดจากโรคไตล้มเหลวได้?", correct: true },  
   { id: 2, question: "Fentanyl เป็นยาในกลุ่ม opioid ที่ใช้บรรเทาปวดรุนแรงได้?", correct: true },  
-  { id: 3, question: "Adrenaline ทำให้หลอดเลือดขยายตัว ช่วยเพิ่มการไหลเวียนของเลือด?", correct: false },  
-  { id: 4, question: "Dopamine ใช้ในการรักษาภาวะหัวใจหยุดเต้นและความดันโลหิตต่ำ?", correct: false },  
-  { id: 5, question: "Nicardipine สามารถใช้ในการรักษาภาวะหัวใจล้มเหลว?", correct: false },  
-  { id: 6, question: "Regular Insulin ช่วยเพิ่มระดับน้ำตาลโดยกระตุ้นให้ตับปล่อยกลูโคสออกมา?", correct: false },  
-  { id: 7, question: "ยา Morphine (MO) อาจทำให้เกิดอาการคลื่นไส้และอาเจียน?", correct: true },  
-  { id: 8, question: "อาการท้องเสียและปวดศีรษะเป็นอาการข้างเคียงของ Pethidine?", correct: false },  
-  { id: 9, question: "การใช้ Potassium chloride (KCl) เหมาะในการรักษาผู้ป่วยที่มีภาวะโพแทสเซียมสูงในเลือด?", correct: false },  
-  { id: 10, question: "Magnesium sulfate ใช้ในการรักษาผู้ป่วยที่มีภาวะการตั้งครรภ์ที่มีความเสี่ยงต่อการชักจากภาวะครรภ์เป็นพิษ?", correct: true },  
-  { id: 11, question: "การใช้ Amiodarone ใช้รักษาภาวะหัวใจเต้นผิดจังหวะ?", correct: true },  
-  { id: 12, question: "Norepinephrine (Levophed) ใช้รักษาผู้ป่วยที่มีภาวะความดันโลหิตต่ำ?", correct: true }  
+  // { id: 3, question: "Adrenaline ทำให้หลอดเลือดขยายตัว ช่วยเพิ่มการไหลเวียนของเลือด?", correct: false },  
+  // { id: 4, question: "Dopamine ใช้ในการรักษาภาวะหัวใจหยุดเต้นและความดันโลหิตต่ำ?", correct: false },  
+  // { id: 5, question: "Nicardipine สามารถใช้ในการรักษาภาวะหัวใจล้มเหลว?", correct: false },  
+  // { id: 6, question: "Regular Insulin ช่วยเพิ่มระดับน้ำตาลโดยกระตุ้นให้ตับปล่อยกลูโคสออกมา?", correct: false },  
+  // { id: 7, question: "ยา Morphine (MO) อาจทำให้เกิดอาการคลื่นไส้และอาเจียน?", correct: true },  
+  // { id: 8, question: "อาการท้องเสียและปวดศีรษะเป็นอาการข้างเคียงของ Pethidine?", correct: false },  
+  // { id: 9, question: "การใช้ Potassium chloride (KCl) เหมาะในการรักษาผู้ป่วยที่มีภาวะโพแทสเซียมสูงในเลือด?", correct: false },  
+  // { id: 10, question: "Magnesium sulfate ใช้ในการรักษาผู้ป่วยที่มีภาวะการตั้งครรภ์ที่มีความเสี่ยงต่อการชักจากภาวะครรภ์เป็นพิษ?", correct: true },  
+  // { id: 11, question: "การใช้ Amiodarone ใช้รักษาภาวะหัวใจเต้นผิดจังหวะ?", correct: true },  
+  // { id: 12, question: "Norepinephrine (Levophed) ใช้รักษาผู้ป่วยที่มีภาวะความดันโลหิตต่ำ?", correct: true }  
 ];
 
 const PostTestScreen = () => {
@@ -31,6 +33,11 @@ const PostTestScreen = () => {
   const { firstName, lastName } = useName();
   const fullName = `${firstName} ${lastName}`;
   const navigate = useNavigate();
+  const [modalFeedback, setModalFeedback] = useState(''); // Add state for modal feedback
+  const [showModal, setShowModal] = useState(false); // Add state for modal
+
+  // Shuffle the questions randomly
+  const questions = [...originalQuestions].sort(() => Math.random() - 0.5);
 
   useEffect(() => {
     return () => {
@@ -80,11 +87,24 @@ const PostTestScreen = () => {
     sessionStorage.setItem("postTestScore", score); 
     await playSound(passed ? tadaSound : failedSound);
 
-    window.alert(
-      `${passed ? "🎉 คุณผ่าน Post-Test!" : "❌ คุณยังไม่ผ่าน"}\nคุณได้คะแนน ${score}/${questions.length} (${percentage.toFixed(
-        0
-      )}%)`
-    );
+    setModalFeedback(
+      `${passed ? "🎉 คุณผ่าน Post-Test!" : "❌ คุณยังไม่ผ่าน"}\nคุณได้คะแนน ${score}/${questions.length} (${percentage.toFixed(0)}%)`
+    ); // Set feedback for modal
+    setShowModal(true); // Show the modal
+
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false); // Close the modal
+    if (!modalFeedback.startsWith("🎉")) { //Check if passed
+      setTestCompleted(false);
+      setCurrentQuestionIndex(0);
+      setAnswers({});
+      setProgress(0);
+      navigate("/instruction");
+    } else {
+      navigate("/input-name");
+    }
 
     if (!passed) {
       setTestCompleted(false);
@@ -120,6 +140,13 @@ const PostTestScreen = () => {
           </button>
         )}
       </div>
+      <ResultModal 
+        show={showModal} 
+        score={questions.filter((item, index) => answers[index] === item.correct).length} 
+        totalQuestions={questions.length} 
+        feedback={modalFeedback} 
+        onClose={handleModalClose} 
+      />
     </div>
   );
 };
@@ -131,7 +158,6 @@ const styles = {
     alignItems: "center", 
     minHeight: "100vh",
     padding: "20px",
-    // background: "linear-gradient(to bottom right, #FFDEE9, #B5FFFC)",  //Optional background
   },
   contentContainer: {
     maxWidth: "600px",

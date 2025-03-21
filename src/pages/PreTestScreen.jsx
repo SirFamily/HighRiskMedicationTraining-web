@@ -6,7 +6,7 @@ import ResultModal from "../components/ResultModal";
 import buttonSound from "../assets/audio/sound-effect/comedy_pop_finger_in_mouth_001.mp3";
 import scoreSound from "../assets/audio/sound-effect/ta-da_yrvBrlS.mp3";
 
-const questions = [
+const originalQuestions  = [
   { id: 1, question: "7.5% Sodium Bicarbonate ใช้ในการรักษาภาวะกรดในเลือด (Metabolic Acidosis) ที่เกิดจากโรคไตล้มเหลวได้?", correct: true },  
   { id: 2, question: "Fentanyl เป็นยาในกลุ่ม opioid ที่ใช้บรรเทาปวดรุนแรงได้?", correct: true },  
   { id: 3, question: "Adrenaline ทำให้หลอดเลือดขยายตัว ช่วยเพิ่มการไหลเวียนของเลือด?", correct: false },  
@@ -22,6 +22,7 @@ const questions = [
 ];
 
 const PreTestScreen = () => {
+  const [shuffledQuestions, setShuffledQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [progress, setProgress] = useState(0);
@@ -32,7 +33,21 @@ const PreTestScreen = () => {
   });
   const navigate = useNavigate();
 
-  // Function to play a sound using the HTML Audio API
+  // สุ่มคำถามเมื่อเริ่มต้น
+  useEffect(() => {
+    const shuffleQuestions = () => {
+      const shuffled = [...originalQuestions];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
+    
+    setShuffledQuestions(shuffleQuestions());
+  }, []);
+
+  // ฟังก์ชันเล่นเสียง
   const playSound = async (soundFile) => {
     const audio = new Audio(soundFile);
     try {
@@ -48,10 +63,10 @@ const PreTestScreen = () => {
     const newAnswers = { ...answers, [currentQuestionIndex]: answer };
     setAnswers(newAnswers);
 
-    const newProgress = ((currentQuestionIndex + 1) / questions.length) * 100;
+    const newProgress = ((currentQuestionIndex + 1) / shuffledQuestions.length) * 100;
     setProgress(newProgress);
 
-    if (currentQuestionIndex < questions.length - 1) {
+    if (currentQuestionIndex < shuffledQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       checkResults(newAnswers);
@@ -59,13 +74,12 @@ const PreTestScreen = () => {
   };
 
   const checkResults = async (finalAnswers) => {
-    const score = questions.filter(
+    const score = shuffledQuestions.filter(
       (item, index) => finalAnswers[index] === item.correct
     ).length;
-    const percentage = (score / questions.length) * 100;
-    // Store the score in session storage
+    const percentage = (score / shuffledQuestions.length) * 100;
+    
     sessionStorage.setItem("preTestScore", score);
-    console.log("Saved preTestScore to session:", score);
 
     let feedbackMessage = "ลองศึกษาทบทวนเนื้อหาเพิ่มเติมอีกสักนิดนะ 📚";
     if (percentage >= 80) {
@@ -88,13 +102,20 @@ const PreTestScreen = () => {
     navigate("/instruction");
   };
 
+  // แสดงหน้าจอโหลดระหว่างรอสลับคำถาม
+  if (shuffledQuestions.length === 0) {
+    return <div style={styles.container}>กำลังเตรียมคำถาม...</div>;
+  }
+
   return (
     <div style={styles.container}>
       <div style={styles.contentContainer}>
         <div style={styles.progressBar}>
           <div style={{ ...styles.progressFill, width: `${progress}%` }}></div>
         </div>
-        <p style={styles.question}>{questions[currentQuestionIndex].question}</p>
+        <p style={styles.question}>
+          {shuffledQuestions[currentQuestionIndex].question}
+        </p>
         <div style={styles.buttonContainer}>
           <button style={styles.answerButton} onClick={() => handleAnswer(true)}>
             TRUE
@@ -106,7 +127,7 @@ const PreTestScreen = () => {
         <ResultModal
           show={modalData.show}
           score={modalData.score}
-          totalQuestions={questions.length}
+          totalQuestions={shuffledQuestions.length}
           feedback={modalData.feedback}
           onClose={handleCloseModal}
         />
