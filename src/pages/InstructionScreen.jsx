@@ -22,7 +22,7 @@ const InstructionScreen = () => {
           className={styles.learnButton}
           onClick={() => {
             playSound();
-            setTimeout(() => navigate("/matching-game"), 300);
+            setTimeout(() => navigate("/learning-content"), 300);
           }}
         >
           📚 อ่านเนื้อหาด้วยตัวเอง
@@ -31,7 +31,7 @@ const InstructionScreen = () => {
           className={styles.videoButton}
           onClick={() => {
             playSound();
-            setTimeout(() => navigate("/matching-game"), 300);
+            setTimeout(() => navigate("/video"), 300);
           }}
         >
           🎥 เรียนรู้ผ่านวิดีโอ

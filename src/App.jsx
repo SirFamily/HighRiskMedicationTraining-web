@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import HomeScreen from './pages/HomeScreen';
 import './App.css'
 import PreTestScreen from './pages/PreTestScreen';
-// import LearningContentScreen from './pages/LearningContentScreen';
+import LearningContentScreen from './pages/LearningContentScreen';
 import MatchingGameScreen from './pages/MatchingGameScreen';
 import SpellingGameScreen from './pages/SpellingGameScreen';
 import SimulationGameScreen from './pages/SimulationGameScreen';
@@ -12,7 +12,7 @@ import InputNameScreen from './pages/InputNameScreen';
 import CertificateScreen from './pages/CertificateScreen';
 import FeedbackScreen from './pages/FeedbackScreen';
 import InstructionScreen from './pages/InstructionScreen';
-// import VideoScreen from './pages/VideoScreen';
+import VideoScreen from './pages/VideoScreen';
 
 const App = () => {
   return (
@@ -20,8 +20,8 @@ const App = () => {
       <Route path="/" element={<HomeScreen />} />
       <Route path="/pre-test" element={<PreTestScreen />} />
       <Route path="/instruction" element={<InstructionScreen />} />
-      {/* <Route path="/learning-content" element={<LearningContentScreen />} /> */}
-      {/* <Route path="/video" element={<VideoScreen />} /> */}
+      <Route path="/learning-content" element={<LearningContentScreen />} />
+      <Route path="/video" element={<VideoScreen />} />
       <Route path="/matching-game" element={<MatchingGameScreen />} />
       <Route path="/spelling-game" element={<SpellingGameScreen />} />
       <Route path="/simulation-game" element={<SimulationGameScreen />} />
