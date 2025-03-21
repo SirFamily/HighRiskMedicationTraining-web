@@ -225,7 +225,7 @@ const SpellingGameScreen = () => {
 
   const handleCloseModal = () => {
     setShowResultModal(false);
-    navigate("/simulation-game");
+    navigate("/simulation-game", { replace: true });
   };
 
   // Create an array that represents the answer boxes, including spaces

@@ -99,7 +99,7 @@ const PreTestScreen = () => {
 
   const handleCloseModal = () => {
     setModalData({ ...modalData, show: false });
-    navigate("/instruction");
+    navigate("/instruction", { replace: true });
   };
 
   // แสดงหน้าจอโหลดระหว่างรอสลับคำถาม

@@ -139,7 +139,7 @@ const InputNameScreen = () => {
 
       if (json.status === "success") {
         setLoading(false);
-        navigate("/feedback");
+        navigate("/feedback", { replace: true });
       } else {
         throw new Error(json.message);
       }

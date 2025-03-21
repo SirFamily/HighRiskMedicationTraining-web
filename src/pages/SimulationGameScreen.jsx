@@ -215,7 +215,7 @@ const SimulationGameScreen = () => {
 
   const handleModalClose = () => {
     setShowResultModal(false);
-    navigate("/post-test");
+    navigate("/post-test", { replace: true });
   };
   return (
     <div style={styles.mainContainer}>

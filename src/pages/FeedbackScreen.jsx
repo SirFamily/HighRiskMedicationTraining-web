@@ -40,7 +40,7 @@ const FeedbackScreen = () => {
   const handleGoToCertificate = async () => {
     await playSound(popSound); // Use the imported variable
     if (window.confirm("รบกวนทำแบบสอบถามก่อนรับเกียรติบัตร 🙏")) {
-      navigate("/certificate");
+      navigate("/certificate", { replace: true });
     }
   };
 

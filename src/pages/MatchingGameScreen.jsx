@@ -118,7 +118,8 @@ const DrugMatchingGameScreen = () => {
 
   const goToNextGame = async () => {
     await playSound(buttonSoundFile);
-    navigate("/spelling-game");
+    // Replace the current history entry instead of pushing a new one
+    navigate("/spelling-game", { replace: true }); 
   };
   return (
     <div style={styles.container}>
