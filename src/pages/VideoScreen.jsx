@@ -18,7 +18,7 @@ const VideoScreen = () => {
   const handleButtonClick = () => {
     playSound();
     setTimeout(() => {
-      navigate('/matching-game');
+      navigate('/matching-game', { replace: true });
     }, 300); // Delay navigation slightly to allow sound to play
   };
 

@@ -93,7 +93,7 @@ export default function LearningContentScreen() {
         {' โดย ปาร์ค ฮันนี่บี.'}
       </div> */}
 
-      <button style={styles.button} onClick={() => navigate('/matching-game')}>
+      <button style={styles.button} onClick={() => navigate('/matching-game', { replace: true })}>
         🎮 ไปที่เกมจับคู่
       </button>
     </div>
