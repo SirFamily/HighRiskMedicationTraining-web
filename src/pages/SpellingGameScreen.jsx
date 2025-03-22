@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import ResultModal from '../components/ResultModal';
+import ResultModal from "../components/ResultModal";
 
 // Import sound-effect files
 import newFollowerSound from "../assets/audio/sound-effect/new-follower_62zQLKz.mp3";
@@ -43,38 +43,54 @@ const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
 
 const SpellingGameScreen = () => {
   const [currentDrug, setCurrentDrug] = useState("");
+  const [currentDrugData, setCurrentDrugData] = useState(null);
   const [letters, setLetters] = useState([]);
   const [userAnswer, setUserAnswer] = useState([]);
   const [usedIndexes, setUsedIndexes] = useState(new Set());
   const [completedWords, setCompletedWords] = useState([]);
+  const [previousDrug, setPreviousDrug] = useState(null);
   const [isLastWord, setIsLastWord] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [score, setScore] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isGameStarted, setIsGameStarted] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const audioRef = useRef(null);
   const navigate = useNavigate();
 
-  // เพิ่ม event listener เพื่อติดตามขนาดหน้าจอ
+  // ติดตามการเปลี่ยนแปลงขนาดหน้าจอ
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
-    // Start a new round when the component mounts.
-    startNewRound();
-    // Cleanup: In a web environment, we let the Audio API handle unloading.
-    return () => {};
+    // เริ่มเกมใหม่เมื่อ component ถูก mount แต่ใช้ timeout เพื่อป้องกันการเล่นเสียงพร้อมกัน
+    setTimeout(() => {
+      startNewRound();
+      setIsInitialLoad(false);
+    }, 500);
+    
+    // Cleanup audio when component unmounts
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
   }, []);
 
-  // Play a sound effect using the HTML Audio API
+  // ฟังก์ชันเล่นเสียง
   const playSoundEffect = async (soundFile) => {
     try {
+      // หยุดเสียงที่กำลังเล่นอยู่ก่อน (ถ้ามี)
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      
       const audio = new Audio(soundFile);
       await audio.play();
     } catch (error) {
@@ -82,37 +98,75 @@ const SpellingGameScreen = () => {
     }
   };
 
-  // Play the drug name sound
   const playDrugSoundEffect = async (soundFile) => {
+    if (!soundFile) return;
+    
+    // หยุดเสียงที่กำลังเล่นอยู่ก่อน (ถ้ามี)
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+    
     try {
       const audio = new Audio(soundFile);
+      audioRef.current = audio;
+      
+      audio.addEventListener('ended', () => {
+        audioRef.current = null;
+      });
+      
       await audio.play();
     } catch (error) {
       console.error("Error playing drug sound:", error);
+      audioRef.current = null;
     }
   };
 
-  // Pick a new word that has not been completed yet.
-  const pickNewWord = () => {
-    if (completedWords.length === drugNames.length) {
+  // ฟังก์ชันเลือกคำใหม่ โดยรับ completedWords จาก parameter (หรือใช้ state ถ้าไม่ได้ส่งเข้ามา)
+  const pickNewWord = (completed) => {
+    const completedWordsList = completed || completedWords;
+    if (completedWordsList.length === drugNames.length) {
       return null;
     }
     const availableWords = drugNames.filter(
-      (word) => !completedWords.includes(word.name)
+      (word) => !completedWordsList.includes(word.name) && word.name !== previousDrug
     );
-    if (availableWords.length === 0) {
+    
+    // ถ้าไม่มีคำที่ไม่ซ้ำกับคำก่อนหน้า และยังมีคำที่ยังไม่ได้ทำ ให้ใช้คำที่ยังไม่ได้ทำทั้งหมด
+    const wordsToChooseFrom = availableWords.length > 0 
+      ? availableWords 
+      : drugNames.filter(word => !completedWordsList.includes(word.name));
+    
+    if (wordsToChooseFrom.length === 0) {
       return null;
     }
-    setIsLastWord(availableWords.length === 1);
-    return availableWords[Math.floor(Math.random() * availableWords.length)];
+    
+    setIsLastWord(wordsToChooseFrom.length === 1);
+    const selectedWord = wordsToChooseFrom[Math.floor(Math.random() * wordsToChooseFrom.length)];
+    
+    // บันทึกคำที่เลือกไว้เป็น previousDrug
+    setPreviousDrug(selectedWord.name);
+    
+    return selectedWord;
   };
 
-  const startNewRound = async () => {
-    await playSoundEffect(newFollowerSound);
-    const newWord = pickNewWord();
-    if (!newWord) {
+  // ฟังก์ชันเริ่มรอบใหม่ โดยส่ง completedWords ที่อัปเดตไปด้วย
+  const startNewRound = async (completed) => {
+    // หยุดเสียงที่กำลังเล่นอยู่ก่อน (ถ้ามี)
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    
+    // เล่นเสียงเริ่มเกมใหม่เฉพาะเมื่อไม่ใช่การโหลดครั้งแรก
+    if (!isInitialLoad) {
+      await playSoundEffect(newFollowerSound);
+    }
+    
+    const newDrugData = pickNewWord(completed);
+    
+    if (!newDrugData) {
       await playSoundEffect(taDaSound);
-      // Play the last drug sound before showing alert.
+      // ใช้คำสุดท้ายก่อนแสดงผลลัพธ์
       const lastDrugData = drugNames.find(
         (drug) => drug.name === completedWords[completedWords.length - 1]
       );
@@ -132,33 +186,44 @@ const SpellingGameScreen = () => {
       }
       return;
     }
-    setCurrentDrug(newWord.name);
     
-    // Filter out spaces when creating the letters array for shuffling
-    const lettersWithoutSpaces = newWord.name.split("")
-      .map((char, index) => ({ 
-        id: index, 
+    setCurrentDrug(newDrugData.name);
+    setCurrentDrugData(newDrugData);
+
+    // เตรียม letters โดยแยกตัวอักษรและเอาช่องว่างออก
+    const lettersWithoutSpaces = newDrugData.name
+      .split("")
+      .map((char, index) => ({
+        id: index,
         letter: char,
-        isSpace: char === " " 
+        isSpace: char === " ",
       }))
-      .filter(item => !item.isSpace);
-      
+      .filter((item) => !item.isSpace);
     setLetters(shuffleArray(lettersWithoutSpaces));
     setUserAnswer([]);
     setUsedIndexes(new Set());
+    
+    // เริ่มต้นอ่านชื่อยาหลังจากเตรียมข้อมูลพร้อมแล้ว
+    setTimeout(() => {
+      playDrugSoundEffect(newDrugData.sound).then(() => {
+        setIsGameStarted(true);
+      });
+    }, 300);
   };
 
   const handleSelectLetter = async (index, letter) => {
     await playSoundEffect(buttonSound);
-    if (userAnswer.length < currentDrug.replace(/ /g, "").length && !usedIndexes.has(index)) {
+    if (
+      userAnswer.length < currentDrug.replace(/ /g, "").length &&
+      !usedIndexes.has(index)
+    ) {
       const newAnswer = [...userAnswer, { index, letter }];
       setUserAnswer(newAnswer);
       setUsedIndexes(new Set([...usedIndexes, index]));
       if (newAnswer.length === currentDrug.replace(/ /g, "").length) {
-        // Reconstruct the answer string, accounting for spaces in the original drug name
+        // สร้างคำตอบโดยคำนึงถึงช่องว่างในชื่อยา
         let answerWithSpaces = "";
         let letterIndex = 0;
-        
         for (let i = 0; i < currentDrug.length; i++) {
           if (currentDrug[i] === " ") {
             answerWithSpaces += " ";
@@ -169,7 +234,6 @@ const SpellingGameScreen = () => {
             }
           }
         }
-        
         checkAnswer(answerWithSpaces);
       }
     }
@@ -187,59 +251,59 @@ const SpellingGameScreen = () => {
     }
   };
 
+  // ฟังก์ชันตรวจสอบคำตอบและอัปเดต completedWords
   const checkAnswer = async (word) => {
-    const currentDrugData = drugNames.find((drug) => drug.name === currentDrug);
     if (word === currentDrug) {
-      setCompletedWords([...completedWords, currentDrug]);
-      if (completedWords.length + 1 === drugNames.length) {
-        await playSoundEffect(taDaSound);
-        const score = drugNames.length;
-        sessionStorage.setItem("spellingGameScore", score);
+      const newCompletedWords = [...completedWords, currentDrug];
+      setCompletedWords(newCompletedWords);
+      
+      // เล่นเสียงถูกก่อน
+      await playSoundEffect(correctSound);
+      
+      // แค่ดีเลย์ 800ms หลังจากเสียงถูกก่อนจะอ่านชื่อยา
+      setTimeout(async () => {
         if (currentDrugData && currentDrugData.sound) {
-          setTimeout(async () => {
-            await playDrugSoundEffect(currentDrugData.sound);
-            setTimeout(() => {
-              setScore(drugNames.length);
+          await playDrugSoundEffect(currentDrugData.sound);
+          
+          // ตรวจสอบว่าเป็นคำสุดท้ายหรือไม่
+          if (newCompletedWords.length === drugNames.length) {
+            setTimeout(async () => {
+              await playSoundEffect(taDaSound);
+              const scoreValue = drugNames.length;
+              sessionStorage.setItem("spellingGameScore", scoreValue);
+              setScore(scoreValue);
               setShowResultModal(true);
-            }, 400);
-          }, 400);
-        } else {
-          setTimeout(() => {
-            setScore(drugNames.length);
-            setShowResultModal(true);
-          }, 400);
-        }
-      } else {
-        await playSoundEffect(correctSound);
-        setTimeout(async () => {
-          if (currentDrugData && currentDrugData.sound) {
-            await playDrugSoundEffect(currentDrugData.sound);
+            }, 1200);
+          } else {
+            // ถ้าไม่ใช่คำสุดท้าย เริ่มรอบใหม่ หลังจากอ่านชื่อยาเสร็จ
+            setTimeout(() => {
+              startNewRound(newCompletedWords);
+            }, 1200);
           }
-          startNewRound();
-        }, 400);
-      }
+        } else {
+          // กรณีไม่มีไฟล์เสียง ให้เริ่มรอบใหม่หลังจากรอเวลาหน่อย
+          setTimeout(() => {
+            startNewRound(newCompletedWords);
+          }, 1000);
+        }
+      }, 800);
     } else {
       playSoundEffect(errorSound);
     }
   };
 
-  const handleCloseModal = () => {
-    setShowResultModal(false);
-    navigate("/simulation-game", { replace: true });
-  };
-
-  // Create an array that represents the answer boxes, including spaces
+  // สร้างช่องคำตอบ (รวมช่องว่าง)
   const createAnswerSlots = () => {
     const slots = [];
     for (let i = 0; i < currentDrug.length; i++) {
       if (currentDrug[i] === " ") {
         slots.push({ isSpace: true });
       } else {
-        const letterIndex = slots.filter(slot => !slot.isSpace).length;
-        slots.push({ 
-          isSpace: false, 
+        const letterIndex = slots.filter((slot) => !slot.isSpace).length;
+        slots.push({
+          isSpace: false,
           letter: userAnswer[letterIndex]?.letter || "",
-          answerIndex: letterIndex
+          answerIndex: letterIndex,
         });
       }
     }
@@ -248,7 +312,7 @@ const SpellingGameScreen = () => {
 
   const answerSlots = createAnswerSlots();
 
-  // คำนวณขนาดของช่องตัวอักษรตามขนาดหน้าจอ
+  // กำหนดขนาดของช่องคำตอบและช่องตัวอักษรตามขนาดหน้าจอ
   const getAnswerBoxSize = () => {
     if (windowWidth <= 320) return 24;
     if (windowWidth <= 480) return 30;
@@ -266,30 +330,43 @@ const SpellingGameScreen = () => {
   const answerBoxSize = getAnswerBoxSize();
   const letterBoxSize = getLetterBoxSize();
 
+  const handleCloseModal = () => {
+    setShowResultModal(false);
+    navigate("/simulation-game", { replace: true });
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.scrollContainer}>
         <div style={styles.gameHeader}>
           <h1 style={styles.title}>🔠 เกมสะกดคำชื่อยา</h1>
-          <p style={styles.subtitle}>เรียงตัวอักษรให้ถูกต้อง!</p>
+          <p style={styles.subtitle}>
+            ฟังและเรียงตัวอักษรให้ถูกต้อง!
+          </p>
         </div>
 
         <div style={styles.progressIndicator}>
-
           <div style={styles.progressBarOuter}>
-            <div 
+            <div
               style={{
                 ...styles.progressBarInner,
-                width: `${(completedWords.length / drugNames.length) * 100}%`
+                width: `${(completedWords.length / drugNames.length) * 100}%`,
               }}
             />
           </div>
         </div>
 
         <div style={styles.answerContainer}>
-          {answerSlots.map((slot, index) => 
+          {answerSlots.map((slot, index) =>
             slot.isSpace ? (
-              <div key={index} style={{...styles.spaceBox, width: answerBoxSize, height: answerBoxSize}}></div>
+              <div
+                key={index}
+                style={{
+                  ...styles.spaceBox,
+                  width: answerBoxSize,
+                  height: answerBoxSize,
+                }}
+              ></div>
             ) : (
               <button
                 key={index}
@@ -299,11 +376,11 @@ const SpellingGameScreen = () => {
                   height: answerBoxSize,
                   fontSize: answerBoxSize * 0.5,
                 }}
-                onClick={() => slot.letter && handleRemoveLetter(slot.answerIndex)}
+                onClick={() =>
+                  slot.letter && handleRemoveLetter(slot.answerIndex)
+                }
               >
-                <span style={styles.answerText}>
-                  {slot.letter}
-                </span>
+                <span style={styles.answerText}>{slot.letter}</span>
               </button>
             )
           )}
@@ -329,7 +406,13 @@ const SpellingGameScreen = () => {
         </div>
 
         <div style={styles.buttonContainer}>
-          <button style={styles.newWordButton} onClick={startNewRound}>
+          <button
+            style={{
+              ...styles.actionButton,
+              backgroundColor: "#FFA500",
+            }}
+            onClick={() => startNewRound(completedWords)}
+          >
             🔄 สุ่มคำใหม่
           </button>
         </div>
@@ -348,7 +431,6 @@ const SpellingGameScreen = () => {
 const styles = {
   container: {
     minHeight: "100vh",
-    // background: "linear-gradient(to bottom right, #EDF7FF, #E6F9FF)",
     position: "relative",
     fontFamily: "'Prompt', sans-serif",
   },
@@ -385,12 +467,9 @@ const styles = {
   progressIndicator: {
     width: "100%",
     marginBottom: "20px",
-  },
-  progressText: {
-    fontSize: "14px",
-    color: "#2C3E50",
-    textAlign: "right",
-    marginBottom: "5px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   progressBarOuter: {
     width: "100%",
@@ -398,12 +477,18 @@ const styles = {
     backgroundColor: "#E0E0E0",
     borderRadius: "4px",
     overflow: "hidden",
+    marginBottom: "5px",
   },
   progressBarInner: {
     height: "100%",
     backgroundColor: "#4CAF50",
     borderRadius: "4px",
     transition: "width 0.3s ease",
+  },
+  progressText: {
+    fontSize: "14px",
+    color: "#5D6D7E",
+    textAlign: "center",
   },
   answerContainer: {
     display: "flex",
@@ -413,9 +498,7 @@ const styles = {
     width: "100%",
     marginBottom: "30px",
     padding: "10px",
-    // backgroundColor: "rgba(255, 255, 255, 0.6)",
     borderRadius: "12px",
-    // boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
   },
   answerBox: {
     backgroundColor: "#FFFFFF",
@@ -446,9 +529,7 @@ const styles = {
     width: "100%",
     marginBottom: "30px",
     padding: "15px",
-    // backgroundColor: "rgba(255, 255, 255, 0.6)",
     borderRadius: "12px",
-    // boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
   },
   letterBox: {
     backgroundColor: "#3498DB",
@@ -460,10 +541,6 @@ const styles = {
     border: "none",
     cursor: "pointer",
     transition: "all 0.2s ease",
-    "&:hover": {
-      transform: "scale(1.05)",
-      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.15)",
-    },
   },
   disabledLetter: {
     backgroundColor: "#D3D3D3",
@@ -482,8 +559,7 @@ const styles = {
     marginTop: "auto",
     padding: "10px 0",
   },
-  newWordButton: {
-    backgroundColor: "#FFA500",
+  actionButton: {
     padding: "12px 20px",
     borderRadius: "25px",
     border: "none",
@@ -493,10 +569,6 @@ const styles = {
     cursor: "pointer",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
     transition: "all 0.2s ease",
-    "&:hover": {
-      backgroundColor: "#FF8C00",
-      transform: "translateY(-2px)",
-    },
   },
 };
 
