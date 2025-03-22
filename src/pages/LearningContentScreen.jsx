@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Import the images you want to display
@@ -20,6 +20,9 @@ import image15 from '../assets/Slides/15.jpg';
 import image16 from '../assets/Slides/16.jpg';
 import image17 from '../assets/Slides/17.jpg';
 import image18 from '../assets/Slides/18.jpg';
+
+// Import sound effect
+import buttonClickSound from '../assets/audio/sound-effect/comedy_pop_finger_in_mouth_001.mp3';
 
 const styles = {
   // ... (rest of your styles)
@@ -255,6 +258,7 @@ export default function LearningContentScreen() {
   const [currentImage, setCurrentImage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [canGoToGame, setCanGoToGame] = useState(false);
+  const audioRef = useRef(null);
 
   const images = [
     image1, image2, image3, image4, image5, image6, image7, image8,
@@ -271,8 +275,18 @@ export default function LearningContentScreen() {
     }
   }, [currentImage, lastImageIndex]);
 
+  const playSound = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0; // Reset audio to start
+      audioRef.current.play().catch(error => {
+        console.error("Error playing sound:", error);
+      });
+    }
+  };
+
   const nextImage = (e) => {
     if (e) e.stopPropagation();
+    playSound();
     if (currentImage < lastImageIndex) {
       setCurrentImage((prev) => prev + 1);
     }
@@ -280,6 +294,7 @@ export default function LearningContentScreen() {
 
   const prevImage = (e) => {
     if (e) e.stopPropagation();
+    playSound();
     if (currentImage > 0) {
       setCurrentImage((prev) => prev - 1);
     }
@@ -310,6 +325,7 @@ export default function LearningContentScreen() {
       onKeyDown={handleKeyDown}
       tabIndex="0"
     >
+      <audio ref={audioRef} src={buttonClickSound} />
       <div style={styles.gradientAccent}></div>
       <h1 style={styles.title}>
         <span style={styles.emoji}>📚</span> สื่อการเรียนรู้
@@ -357,7 +373,10 @@ export default function LearningContentScreen() {
           style={canGoToGame ? styles.buttonGame : styles.buttonGameDisabled}
           onClick={() => {
             if (canGoToGame) {
-              navigate('/matching-game', { replace: true });
+              playSound();
+              setTimeout(() => {
+                navigate('/matching-game', { replace: true });
+              }, 300);
             }
           }}
           disabled={!canGoToGame}
