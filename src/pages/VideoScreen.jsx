@@ -35,7 +35,7 @@ const VideoScreen = () => {
           <iframe
             width="100%"
             height="315"
-            src="https://www.youtube.com/embed/YA8dM3Pga7U?si=Cs9WC9E0xElvOEgf"
+            src="https://www.youtube.com/embed/tAv6Vb1mswg?si=-jbYuRU6oeMCdgBO"
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
