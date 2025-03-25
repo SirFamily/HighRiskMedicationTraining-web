@@ -36,7 +36,7 @@ const scenarios = [
     image: scenario2Image,
     question: "จากภาพ การพยาบาลที่สำคัญคือข้อใด?",
     options: [
-      { text: "ใให้ผู้ป่วยนอนพัก จัดท่าศีรษะสูงและประเมิน V/S", correct: false },
+      { text: "ให้ผู้ป่วยนอนพัก จัดท่าศีรษะสูงและประเมิน V/S", correct: false },
       { text: "ให้ผู้ป่วยนั่งพัก 5 นาทีแล้วมาวัดความดันโลหิตซ้ำอีกครั้ง", correct: false },
       { text: "ติดตาม V/S ทุกๆ 15 นาทีหลังได้รับยาเพื่อเฝ้าระวังหัวใจเต้นเร็ว", correct: true },
       { text: "ถูกทุกข้อ", correct: false },
