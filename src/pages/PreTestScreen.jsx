@@ -59,13 +59,15 @@ const PreTestScreen = () => {
 
   const handleAnswer = async (answer) => {
     await playSound(buttonSound);
-
-    const newAnswers = { ...answers, [currentQuestionIndex]: answer };
+  
+    // เก็บคำตอบโดยใช้ id ของคำถามปัจจุบัน
+    const currentQuestion = shuffledQuestions[currentQuestionIndex];
+    const newAnswers = { ...answers, [currentQuestion.id]: answer };
     setAnswers(newAnswers);
-
+  
     const newProgress = ((currentQuestionIndex + 1) / shuffledQuestions.length) * 100;
     setProgress(newProgress);
-
+  
     if (currentQuestionIndex < shuffledQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
@@ -74,22 +76,24 @@ const PreTestScreen = () => {
   };
 
   const checkResults = async (finalAnswers) => {
-    const score = shuffledQuestions.filter(
-      (item, index) => finalAnswers[index] === item.correct
-    ).length;
+    // ใช้ id ของคำถามแทน index ในการตรวจสอบ
+    const score = shuffledQuestions.reduce((acc, question, index) => {
+      return acc + (finalAnswers[index] === question.correct ? 1 : 0);
+    }, 0);
+  
     const percentage = (score / shuffledQuestions.length) * 100;
     
     sessionStorage.setItem("preTestScore", score);
-
+  
     let feedbackMessage = "ลองศึกษาทบทวนเนื้อหาเพิ่มเติมอีกสักนิดนะ 📚";
     if (percentage >= 80) {
       feedbackMessage = "เยี่ยมมาก! 🎉";
     } else if (percentage >= 60) {
-      feedbackMessage = "ดีมาก! แต่ยังต้องพัฒนาอีกนิดนะ ✨";
+      feedbackMessage = "ดีมาก! แต่ยังต้องพัฒน�ีกนิดนะ ✨";
     }
-
+  
     await playSound(scoreSound);
-
+  
     setModalData({
       show: true,
       score,

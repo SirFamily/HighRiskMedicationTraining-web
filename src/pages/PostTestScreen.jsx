@@ -35,9 +35,12 @@ const PostTestScreen = () => {
   const navigate = useNavigate();
   const [modalFeedback, setModalFeedback] = useState(''); // Add state for modal feedback
   const [showModal, setShowModal] = useState(false); // Add state for modal
+  const [questions, setQuestions] = useState([]);
 
   // Shuffle the questions randomly
-  const questions = [...originalQuestions].sort(() => Math.random() - 0.5);
+  useEffect(() => {
+    setQuestions([...originalQuestions].sort(() => Math.random() - 0.5));
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -88,7 +91,7 @@ const PostTestScreen = () => {
     await playSound(passed ? tadaSound : failedSound);
 
     setModalFeedback(
-      `${passed ? "🎉 คุณผ่าน Post-Test!" : "❌ คุณยังไม่ผ่าน"}\nคุณได้คะแนน ${score}/${questions.length} (${percentage.toFixed(0)}%)`
+      `${passed ? "🎉 คุณผ่าน Post-Test!" : "❌ คุณยังไม่ผ่าน"} (${percentage.toFixed(0)}%)`
     ); // Set feedback for modal
     setShowModal(true); // Show the modal
 
@@ -96,21 +99,13 @@ const PostTestScreen = () => {
 
   const handleModalClose = () => {
     setShowModal(false); // Close the modal
-    if (!modalFeedback.startsWith("🎉")) { //Check if passed
-      setTestCompleted(false);
-      setCurrentQuestionIndex(0);
-      setAnswers({});
-      setProgress(0);
-      navigate("/instruction");
-    } else {
-      navigate("/input-name");
-    }
-
+    const passed = modalFeedback.startsWith("🎉");
     if (!passed) {
       setTestCompleted(false);
       setCurrentQuestionIndex(0);
       setAnswers({});
       setProgress(0);
+      setQuestions([...originalQuestions].sort(() => Math.random() - 0.5)); //reshuffle
       navigate("/instruction", { replace: true });
     } else {
       navigate("/input-name", { replace: true });
@@ -125,7 +120,7 @@ const PostTestScreen = () => {
         <div style={styles.progressBar}>
           <div style={{ ...styles.progressFill, width: `${progress}%` }}></div>
         </div>
-        <p style={styles.question}>{questions[currentQuestionIndex].question}</p>
+        {questions.length > 0 && <p style={styles.question}>{questions[currentQuestionIndex].question}</p>}
         <div style={styles.buttonContainer}>
           <button style={styles.answerButton} onClick={() => handleAnswer(true)}>
             TRUE

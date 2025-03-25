@@ -238,9 +238,9 @@ const styles = {
   },
 
   cardText: {
-    fontSize: "13px",
+    fontSize: "14px",
     textAlign: "center",
-    color: "#34495e",
+    // color: "#34495e",
     margin: 0,
   },
   selectedCard: {
