@@ -40,7 +40,7 @@ const CertificateScreen = () => {
   const fetchCertificate = async () => {
     setLoading(true);
     const url =
-      "https://script.google.com/macros/s/AKfycbww9pbG0AV5oaCVh8wRwigFDYXe3R-YJLxzFzulTAqPNxkReh_BHibGVlfVuY4qro-N1Q/exec?action=getUsers";
+      "https://script.google.com/macros/s/AKfycbzrcG7g_464mk-wEBevFcxcsVYJY6_P3Sdr5RTjJ4KAHI0JHOP8eH5BlQAbhWs1BZU0/exec?action=getUsers";
     try {
       const response = await fetch(url);
       const json = await response.json();

@@ -78,7 +78,7 @@ const InputNameScreen = () => {
     setLoading(true);
 
     try {
-      const url = "https://script.google.com/macros/s/AKfycbww9pbG0AV5oaCVh8wRwigFDYXe3R-YJLxzFzulTAqPNxkReh_BHibGVlfVuY4qro-N1Q/exec?action=getUsers";
+      const url = "https://script.google.com/macros/s/AKfycbzrcG7g_464mk-wEBevFcxcsVYJY6_P3Sdr5RTjJ4KAHI0JHOP8eH5BlQAbhWs1BZU0/exec?action=getUsers";
       let response = await fetch(url);
       let json = await response.json();
 
@@ -106,7 +106,7 @@ const InputNameScreen = () => {
   // Function to send data to Google Script to request a certificate
   const sendCertificate = async (name) => {
     setLoading(true);
-    const url = 'https://script.google.com/macros/s/AKfycby5qTKH3y5QJqAT9P_9xwmGJdxtqfC4FP32Qw9te1FlSQQxunxV2KlQ1Z3jAAtu982g7Q/exec?action=addUserWeb';
+    const url = 'https://script.google.com/macros/s/AKfycbzzHTGLraECMxUDjeMxAD-fpT2JpyBvghVsXjxi8CAIm4fxh6Doos5ajltSy3dh6jwE/exec?action=addUserWeb';
 
     const date = new Date();
     const thaiYear = date.getFullYear() + 543;
