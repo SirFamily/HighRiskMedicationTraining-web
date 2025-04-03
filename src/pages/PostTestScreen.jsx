@@ -106,7 +106,7 @@ const PostTestScreen = () => {
       setAnswers({});
       setProgress(0);
       setQuestions([...originalQuestions].sort(() => Math.random() - 0.5)); //reshuffle
-      navigate("/instruction", { replace: true });
+      navigate("/post-tes", { replace: true });
     } else {
       navigate("/input-name", { replace: true });
     }
